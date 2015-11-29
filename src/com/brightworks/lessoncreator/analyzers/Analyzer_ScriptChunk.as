@@ -155,7 +155,6 @@ import com.brightworks.util.Log;
       public function isChunkExemptFromPunctuationChecking():Boolean {
          if (_scriptAnalyzer.releaseType != Constant_ReleaseType.ALPHA_CAPITALIZED)
             return true;
-         var foo:int;
          return (isAnnounceChunk() || isVocabularyChunk());
       }
 
