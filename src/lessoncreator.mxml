@@ -1,0 +1,66 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<s:WindowedApplication xmlns:fx = "http://ns.adobe.com/mxml/2009"
+                       xmlns:s = "library://ns.adobe.com/flex/spark"
+                       xmlns:mx = "library://ns.adobe.com/flex/mx"
+                       xmlns:view = "com.brightworks.lessoncreator.view.*"
+                       applicationComplete = "onApplicationComplete()"
+                       preinitialize = "onPreinitialize()">
+
+   <fx:Script>
+      <![CDATA[
+      import com.brightworks.lessoncreator.constants.Constants_ApplicationState;
+      import com.brightworks.lessoncreator.model.MainModel;
+      import com.brightworks.lessoncreator.util.singleton.LessonCreatorSingletonManager;
+      import com.brightworks.util.Log;
+      import com.brightworks.util.Utils_AIR;
+      import com.flexspy.FlexSpy;
+      import com.flexspy.KeySequence;
+
+      import mx.core.FlexGlobals;
+
+      import spark.components.WindowedApplication;
+
+      private var _model:MainModel;
+      private var _singletonManager:LessonCreatorSingletonManager;
+
+      private function onApplicationComplete():void {
+         WindowedApplication(FlexGlobals.topLevelApplication).stage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+      }
+
+      private function onDisplayStateChange(event:NativeWindowDisplayStateEvent):void {
+         if (event.afterDisplayState == NativeWindowDisplayState.MAXIMIZED) {
+            //alpha = 1;
+            //visible = true;
+         }
+      }
+
+      private function onErrorOrFatalLog():void {
+         callLater(onErrorOrFatalLog_Continued);
+      }
+
+      private function onErrorOrFatalLog_Continued():void {
+         if (_model)
+            _model.applicationState = Constants_ApplicationState.APPLICATION_STATE__PRIMARY__LOG_OUTPUT;
+      }
+
+      private function onKeyDown(event:KeyboardEvent):void {
+            trace(event.keyCode);// 16 = ~
+         if ((event.shiftKey) && (event.keyCode == 192)) {
+            FlexSpy.show();
+         }
+      }
+
+      private function onPreinitialize():void {
+         WindowedApplication(FlexGlobals.topLevelApplication).maximize();
+         _singletonManager = new LessonCreatorSingletonManager();
+         Log.init(Utils_AIR.appName, onErrorOrFatalLog, onErrorOrFatalLog);
+         _model = MainModel.init();
+      }
+      ]]>
+   </fx:Script>
+
+   <view:View_Main height = "95%"
+                   width = "95%"
+                   horizontalCenter = "0"
+                   verticalCenter = "0" />
+</s:WindowedApplication>

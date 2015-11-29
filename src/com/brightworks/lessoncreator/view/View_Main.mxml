@@ -1,0 +1,142 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<view:ViewBase xmlns:fx = "http://ns.adobe.com/mxml/2009"
+               xmlns:s = "library://ns.adobe.com/flex/spark"
+               xmlns:mx = "library://ns.adobe.com/flex/mx"
+               xmlns:view = "com.brightworks.lessoncreator.view.*"
+               initialize = "onInitialize()"
+               paddingLeft = "10"
+               paddingRight = "10"
+               paddingTop = "10"
+               paddingBottom = "10">
+
+   <fx:Script>
+      <![CDATA[
+      import com.brightworks.lessoncreator.constants.Constants_ApplicationState;
+      import com.brightworks.util.Log;
+
+      import mx.collections.ArrayCollection;
+      import mx.events.EffectEvent;
+
+      import spark.effects.Fade;
+
+      private var _mainViewStackFade:Fade;
+      [Bindable]
+      private var _primaryPageSelectionDropDownListDataProvider:ArrayCollection;
+
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      //
+      //          Protected Methods
+      //
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+      override protected function onApplicationStateChange(newValue:String):void {
+         if (!mainViewStack)
+            return;
+         switch (model.applicationState) {
+            case Constants_ApplicationState.APPLICATION_STATE__PRIMARY__CREATE_PRODUCTION_SCRIPTS:
+               mainViewStack.selectedChild = tabNavigatorContent_CreateProductionScripts;
+               break;
+            case Constants_ApplicationState.APPLICATION_STATE__PRIMARY__HOME:
+               mainViewStack.selectedChild = tabNavigatorContent_Home;
+               break;
+            case Constants_ApplicationState.APPLICATION_STATE__PRIMARY__LOG_OUTPUT:
+               mainViewStack.selectedChild = tabNavigatorContent_LogOutput;
+               break;
+            case Constants_ApplicationState.APPLICATION_STATE__PRIMARY__SEARCH:
+               mainViewStack.selectedChild = tabNavigatorContent_Search;
+               break;
+            default:
+               if (model.applicationState != null)
+                  Log.fatal("View_Main.onApplicationStateChange(): No match for " + model.applicationState);
+         }
+         primaryPageSelectionDropDownList.selectedItem = model.applicationState;
+         mainViewStack.alpha = 1;
+      }
+
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      //
+      //          Private Methods
+      //
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+      private function initializeMainViewStackFade():void {
+         _mainViewStackFade = new Fade();
+         _mainViewStackFade.alphaFrom = 1;
+         _mainViewStackFade.alphaTo = 0;
+         _mainViewStackFade.duration = 400;
+         _mainViewStackFade.target = mainViewStack;
+      }
+
+      private function initializePrimaryPageSelectionDropDownListDataProvider():void {
+         _primaryPageSelectionDropDownListDataProvider = new ArrayCollection();
+         for each (var appState:String in Constants_ApplicationState.APPLICATION_STATE_LIST__PRIMARY_STATES) {
+            _primaryPageSelectionDropDownListDataProvider.addItem(appState);
+         }
+      }
+
+      private function onInitialize():void {
+         initializeMainViewStackFade();
+         initializePrimaryPageSelectionDropDownListDataProvider();
+         primaryPageSelectionDropDownList.selectedItem = Constants_ApplicationState.APPLICATION_STATE__PRIMARY__HOME;
+      }
+
+      private function onPrimaryPageSelectionDropDownListChange():void {
+         _mainViewStackFade.addEventListener(EffectEvent.EFFECT_END, onMainViewStackFadeEffectEnd);
+         _mainViewStackFade.play();
+      }
+
+      private function onMainViewStackFadeEffectEnd(event:EffectEvent):void {
+         _mainViewStackFade.removeEventListener(EffectEvent.EFFECT_END, onMainViewStackFadeEffectEnd);
+         model.applicationState = primaryPageSelectionDropDownList.selectedItem;
+      }
+      ]]>
+   </fx:Script>
+   <s:HGroup id = "topGroup"
+             width = "100%"
+             height = "30">
+      <s:Label text = "Lesson Creator"
+               fontSize = "24"
+               width = "100%" />
+      <s:DropDownList id = "primaryPageSelectionDropDownList"
+                      change = "onPrimaryPageSelectionDropDownListChange()"
+                      dataProvider = "{_primaryPageSelectionDropDownListDataProvider}"
+                      fontSize = "16"
+                      height = "24"
+                      textAlign = "center"
+                      width = "300" />
+      <s:Spacer width = "100%" />
+   </s:HGroup>
+   <mx:ViewStack id = "mainViewStack"
+                 creationPolicy = "all"
+                 height = "100%"
+                 width = "100%">
+      <s:NavigatorContent id = "tabNavigatorContent_Home"
+                          height = "100%"
+                          width = "100%">
+         <view:View_Home id = "homeView"
+                             height = "100%"
+                             width = "100%" />
+      </s:NavigatorContent>
+      <s:NavigatorContent id = "tabNavigatorContent_CreateProductionScripts"
+                          height = "100%"
+                          width = "100%">
+         <view:View_CreateProductionScripts id = "createProductionScriptsView"
+                                            height = "100%"
+                                            width = "100%" />
+      </s:NavigatorContent>
+      <s:NavigatorContent id = "tabNavigatorContent_Search"
+                          height = "100%"
+                          width = "100%">
+         <view:View_Search id = "searchView"
+                                            height = "100%"
+                                            width = "100%" />
+      </s:NavigatorContent>
+      <s:NavigatorContent id = "tabNavigatorContent_LogOutput"
+                          height = "100%"
+                          width = "100%">
+         <view:View_LogOutput id = "logOutputView"
+                              height = "100%"
+                              width = "100%" />
+      </s:NavigatorContent>
+   </mx:ViewStack>
+</view:ViewBase>

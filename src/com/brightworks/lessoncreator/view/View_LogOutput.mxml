@@ -1,0 +1,45 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<view:ViewBase xmlns:fx = "http://ns.adobe.com/mxml/2009"
+               xmlns:s = "library://ns.adobe.com/flex/spark"
+               xmlns:mx = "library://ns.adobe.com/flex/mx"
+               xmlns:view = "com.brightworks.lessoncreator.view.*"
+               creationComplete = "onCreationComplete()"
+               height = "100%"
+               width = "100%">
+
+    <fx:Script>
+        <![CDATA[
+            import com.brightworks.util.Log;
+
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            //
+            //          Protected Methods
+            //
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+            protected function onCreationComplete():void {
+                logOutputTextArea.text = Log.getLogInfoForInAppViewing();
+                logOutputTextArea.verticalScrollPosition = 0;
+            }
+
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+            //
+            //          Private Methods
+            //
+            // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+        ]]>
+    </fx:Script>
+
+    <s:Label text = "Error"
+             fontSize = "20" />
+    <s:Spacer />
+    <s:Button label = "Back"
+              click = "{model.returnToPreviousApplicationState()}" />
+    <s:Spacer />
+    <mx:TextArea id = "logOutputTextArea"
+                 editable = "false"
+                 color = "#823970"
+                 height = "100%"
+                 width = "100%"
+                 borderStyle = "none" />
+</view:ViewBase>

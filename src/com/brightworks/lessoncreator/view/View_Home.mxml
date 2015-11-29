@@ -1,0 +1,102 @@
+<?xml version = "1.0" encoding = "utf-8"?>
+<view:ViewBase xmlns:fx = "http://ns.adobe.com/mxml/2009"
+               xmlns:s = "library://ns.adobe.com/flex/spark"
+               xmlns:mx = "library://ns.adobe.com/flex/mx"
+               xmlns:view = "com.brightworks.lessoncreator.view.*"
+               initialize = "onInitialize()">
+
+   <fx:Script>
+      <![CDATA[
+      import com.brightworks.lessoncreator.constants.Constants_ApplicationState;
+      import com.brightworks.lessoncreator.model.LessonDevFolder;
+      import com.brightworks.lessoncreator.model.LessonDevFolder;
+
+      import mx.collections.ArrayCollection;
+
+      import spark.components.gridClasses.GridColumn;
+      import spark.events.GridSelectionEvent;
+
+      [Bindable]
+      private var _lessonDevFolderDataGridDataProvider:ArrayCollection;
+
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      //
+      //          Protected Methods
+      //
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+      override protected function onApplicationStateChange(newValue:String):void {
+         switch (model.applicationState) {
+            case Constants_ApplicationState.APPLICATION_STATE__PRIMARY__HOME:
+               break;
+         }
+      }
+
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      //
+      //          Private Methods
+      //
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+      private function initializeLessonDevFolderDataGrid():void {
+         var columns:ArrayCollection = new ArrayCollection();
+         var column:GridColumn;
+         column = new GridColumn();
+         column.dataField = "lessonId";
+         column.headerText = "Lessons, by Lesson ID";
+         columns.addItem(column);
+         lessonDevFolderDataGrid.columns = columns;
+      }
+
+      private function onInitialize():void {
+         initializeLessonDevFolderDataGrid();
+         refreshLessonDevFolderDataGrid();
+      }
+
+      private function onLessonDevFolderDataGridSelectionChange():void {
+         var newFolder:LessonDevFolder = LessonDevFolder(lessonDevFolderDataGrid.selectedItem);
+         model.currentLessonDevFolder = newFolder;
+         lessonDevFolderDetailDisplay.lessonDevFolder = newFolder;
+         if (newFolder)
+            newFolder.refresh();
+      }
+
+      private function onLessonDevWorkspaceComboBoxChange():void {
+         refreshLessonDevFolderDataGrid();
+      }
+
+      private function refreshLessonDevFolderDataGrid():void {
+         if (_lessonDevFolderDataGridDataProvider)
+            _lessonDevFolderDataGridDataProvider.removeAll();
+         else
+            _lessonDevFolderDataGridDataProvider = new ArrayCollection();
+         for each (var item:LessonDevFolder in model.currentLessonDevFolderList) {
+            _lessonDevFolderDataGridDataProvider.addItem(item);
+         }
+      }
+      ]]>
+   </fx:Script>
+
+   <s:HGroup height = "100%"
+             width = "100%">
+      <s:VGroup height = "100%"
+                width = "400">
+         <s:ComboBox id = "lessonDevWorkspaceComboBox"
+                     change = "onLessonDevWorkspaceComboBoxChange()"
+                     dataProvider = "{model.lessonDevWorkspaceList}"
+                     labelField = "displayName"
+                     selectedItem = "{model.currentLessonDevWorkspace}"
+                     width = "100%" />
+         <s:Spacer />
+         <s:DataGrid id = "lessonDevFolderDataGrid"
+                     selectionChange = "onLessonDevFolderDataGridSelectionChange()"
+                     dataProvider = "{_lessonDevFolderDataGridDataProvider}"
+                     height = "100%"
+                     width = "100%" />
+      </s:VGroup>
+      <s:Spacer width = "25" />
+      <view:View_LessonDevFolderDetail id = "lessonDevFolderDetailDisplay"
+                                       height = "100%"
+                                       width = "100%" />
+   </s:HGroup>
+</view:ViewBase>

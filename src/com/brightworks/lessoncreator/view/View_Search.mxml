@@ -1,0 +1,140 @@
+<?xml version = "1.0"?>
+<view:ViewBase xmlns:fx = "http://ns.adobe.com/mxml/2009"
+               xmlns:mx = "library://ns.adobe.com/flex/mx"
+               xmlns:s = "library://ns.adobe.com/flex/spark"
+               xmlns:view = "com.brightworks.lessoncreator.view.*"
+               initialize = "onInitialize()">
+
+   <fx:Script>
+      <![CDATA[
+         import com.brightworks.lessoncreator.model.LessonDevFolder;
+         import com.brightworks.lessoncreator.util.scriptsearch.ScriptSearchResult;
+         import com.brightworks.util.Utils_DataConversionComparison;
+
+         import mx.collections.ArrayCollection;
+
+         import spark.components.gridClasses.GridColumn;
+
+         [Bindable]
+         private var _resultsDataGridDataProvider:ArrayCollection;
+
+         private function initGridColumns():void {
+            var columns:ArrayCollection = new ArrayCollection();
+            var column:GridColumn;
+            column = new GridColumn();
+            column.dataField = "lessonId";
+            column.headerText = "Lesson ID";
+            column.width = 400;
+            columns.addItem(column);
+            column = new GridColumn();
+            column.labelFunction = labelFunction_scriptValidityColumn;
+            column.headerText = "";
+            column.width = 21;
+            columns.addItem(column);
+            column = new GridColumn();
+            column.dataField = "lineNumber";
+            column.headerText = "Line Number";
+            column.width = 90;
+            columns.addItem(column);
+            column = new GridColumn();
+            column.dataField = "lineText";
+            column.headerText = "";
+            columns.addItem(column);
+            resultsDataGrid.columns = columns;
+         }
+
+         private function labelFunction_scriptValidityColumn(item:Object, column:GridColumn):String {
+            if (ScriptSearchResult(item).isLessonScriptProblemFree) {
+               return "";
+            } else {
+               return "X";
+            }
+         }
+
+         private function onInitialize():void {
+            initGridColumns();
+         }
+
+         private function onSearchButtonClick():void {
+            var caseSensitiveSearch:Boolean = caseSensitiveCheckBox.selected;
+            var searchText:String = caseSensitiveSearch ? searchStringTextInput.text : searchStringTextInput.text.toLowerCase();
+            var resultsList:ArrayCollection = new ArrayCollection();
+            var devFolderList:ArrayCollection = model.currentLessonDevFolderList;
+            for each (var lessonDevFolder:LessonDevFolder in devFolderList) {
+               if (!lessonDevFolder.scriptText)
+                  continue;
+               var lineStringList:Array = Utils_DataConversionComparison.convertStringToArrayOfLineStrings(lessonDevFolder.scriptText, true)
+               for (var i:uint = 0; i < lineStringList.length; i++) {
+                  var lineText:String = lineStringList[i];
+                  if (!caseSensitiveSearch) {
+                     lineText = lineText.toLowerCase();
+                  }
+                  if (lineText.indexOf(searchText) != -1) {
+                     var result:ScriptSearchResult = new ScriptSearchResult();
+                     result.isLessonScriptProblemFree = lessonDevFolder.doesProblemFreeScriptFileExist();
+                     result.lessonId = lessonDevFolder.lessonId;
+                     result.lineNumber = i + 1;
+                     result.lineText = lineStringList[i];
+                     resultsList.addItem(result);
+                  }
+               }
+            }
+            _resultsDataGridDataProvider = resultsList;
+            if (resultsList.length > 0)
+               viewStack.selectedChild = viewStackView_ResultsGrid;
+            else
+               viewStack.selectedChild = viewStackView_NoResultsFound;
+         }
+      ]]>
+   </fx:Script>
+
+   <s:HGroup height = "100%"
+             width = "100%">
+      <s:VGroup height = "100%"
+                width = "25%">
+         <s:Spacer/>
+         <s:HGroup width="100%">
+            <s:TextInput id = "searchStringTextInput"
+                         width = "100%" />
+            <s:Button id = "searchButton"
+                      click = "onSearchButtonClick()"
+                      enabled = "{searchStringTextInput.text.length > 0}"
+                      label = "Search" />
+            <s:Spacer width="20"/>
+         </s:HGroup>
+         <s:Spacer/>
+         <s:CheckBox id="caseSensitiveCheckBox"
+                     label="Case Sensitive"/>
+      </s:VGroup>
+      <s:VGroup height = "100%"
+                width = "75%">
+         <mx:ViewStack id = "viewStack"
+                       creationPolicy = "all"
+                       height = "100%"
+                       width = "100%">
+            <s:NavigatorContent id = "viewStackView_Blank"
+                                height = "100%"
+                                width = "100%">
+            </s:NavigatorContent>
+            <s:NavigatorContent id = "viewStackView_ResultsGrid"
+                                height = "100%"
+                                width = "100%">
+               <s:DataGrid id = "resultsDataGrid"
+                           dataProvider = "{_resultsDataGridDataProvider}"
+                           height = "100%"
+                           width = "100%" />
+            </s:NavigatorContent>
+            <s:NavigatorContent id = "viewStackView_NoResultsFound"
+                                height = "100%"
+                                width = "100%">
+               <s:Label text="No results found"
+                        fontSize="24"
+                        horizontalCenter="0"
+                        verticalCenter="0"/>
+            </s:NavigatorContent>
+         </mx:ViewStack>
+
+
+      </s:VGroup>
+   </s:HGroup>
+</view:ViewBase>
