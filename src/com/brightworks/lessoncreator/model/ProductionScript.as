@@ -139,6 +139,7 @@ import com.brightworks.lessoncreator.analyzers.Analyzer_Script;
       private function createScriptText_LessonNameAndPaymentSummary():String {
          var result:String = "";
          var totalPayment:uint = 0;
+         var totalPaidForUnitCount:uint = 0;
          for each (var lessonProductionScript:ProductionScript_Lesson in _lessonProductionScriptList) {
             var roleString:String = (lessonProductionScript.roleName) ? " " + lessonProductionScript.roleName : "";
             result +=
@@ -148,14 +149,30 @@ import com.brightworks.lessoncreator.analyzers.Analyzer_Script;
                adornPaymentAmountWithCurrencyUnit(lessonProductionScript.computeAudioRecordingPayment(), voiceTalent.paymentCurrency) +
                "\n";
             totalPayment += lessonProductionScript.computeAudioRecordingPayment();
+            totalPaidForUnitCount += lessonProductionScript.computeAudioRecordingPaidForUnitCount();
          }
          result += "Per-order payment: " + adornPaymentAmountWithCurrencyUnit(voiceTalent.paymentPerOrderBaseRate, voiceTalent.paymentCurrency) + "\n";
          totalPayment += voiceTalent.paymentPerOrderBaseRate;
          if (totalPayment >= voiceTalent.paymentPerOrderMinimum) {
-            result += "Total payment: " + " " + adornPaymentAmountWithCurrencyUnit(totalPayment, voiceTalent.paymentCurrency) + "\n";
+            result +=
+                  "Total payment: " +
+                  " " +
+                  adornPaymentAmountWithCurrencyUnit(totalPayment, voiceTalent.paymentCurrency) +
+                  "\n";
          } else {
-            result += "Total payment (based on minimum): " + " " + adornPaymentAmountWithCurrencyUnit(voiceTalent.paymentPerOrderMinimum, voiceTalent.paymentCurrency) + "\n";
+            result +=
+                  "Total payment (based on minimum): " +
+                  " " +
+                  adornPaymentAmountWithCurrencyUnit(voiceTalent.paymentPerOrderMinimum, voiceTalent.paymentCurrency) +
+                  "\n";
          }
+         result +=
+               "\n" +
+               "Total " +
+               Constants_ProductionScript.getAudioRecordingPaidForUnitForLanguage(languageIso639_3Code_Script).toLowerCase() +
+               "s: " +
+               totalPaidForUnitCount +
+               "\n";
          return result;
       }
 

@@ -5,8 +5,8 @@ import com.brightworks.util.Utils_DataConversionComparison;
    public class Constants_Language {
       public static const DISPLAY_NAME__CMN:String = "Mandarin Chinese";
       public static const DISPLAY_NAME__ENG:String = "English";
-      public static const ISO_639_3_CODE__ENG:String = "eng";
       public static const ISO_639_3_CODE__CMN:String = "cmn";
+      public static const ISO_639_3_CODE__ENG:String = "eng";
       public static const LANGUAGE_CODE_LIST:Array = [
          ISO_639_3_CODE__CMN,
          ISO_639_3_CODE__ENG];

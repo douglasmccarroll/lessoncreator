@@ -30,6 +30,18 @@ public class Constants_ProductionScript {
       public function Constants_ProductionScript() {
       }
 
+      public static function getAudioRecordingPaidForUnitForLanguage(iso639_3code:String):String {
+         switch (iso639_3code) {
+            case Constants_Language.ISO_639_3_CODE__CMN:
+               return AUDIO_RECORDING_PAID_FOR_UNIT__CMN;
+            case Constants_Language.ISO_639_3_CODE__ENG:
+               return AUDIO_RECORDING_PAID_FOR_UNIT__ENG;
+            default:
+               Log.error("Constants_ProductionScript.getAudioRecordingPaidForUnitForLanguage(): No case for iso639_3code: " + iso639_3code);
+         }
+         return null;
+      }
+
       public static function getFileNameSuffixForScriptType(scriptType:String):String {
          var result:String;
          switch (scriptType) {

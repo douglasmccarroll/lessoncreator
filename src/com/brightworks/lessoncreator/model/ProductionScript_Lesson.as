@@ -73,19 +73,34 @@ import com.brightworks.lessoncreator.constants.Constants_ProductionScript;
          return result;
       }
 
-      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      //
-      //     Private Methods
-      //
-      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-      private function computeAudioRecordingPaidForUnitCount():uint {
+      public function computeAudioRecordingPaidForUnitCount():uint {
          var result:uint = 0;
          for (var chunkNum:uint = 1; chunkNum <= _scriptAnalyzer.chunkCount; chunkNum++) {
             var chunkAnalyzer:Analyzer_ScriptChunk = _scriptAnalyzer.getChunkAnalyzer(chunkNum);
             result += computeAudioRecordingPaidForUnitCount_Chunk(chunkAnalyzer);
          }
          result += computeAudioRecordingPaidForUnitCount_AgreementText();
+         return result;
+      }
+
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+      //
+      //     Private Methods
+      //
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+      private function getAudioRecordingPaidForUnit():String {
+         var result:String;
+         switch (_languageType) {
+            case Constants_ProductionScript.LANGUAGE_TYPE__NATIVE:
+               result = audioRecordingPaidForUnit_NativeLanguage;
+               break;
+            case Constants_ProductionScript.LANGUAGE_TYPE__TARGET:
+               result = audioRecordingPaidForUnit_TargetLanguage;
+               break;
+            default:
+               Log.error("ProductionScript_Lesson.getAudioRecordingPaidForUnit(): No match for _languageType of: " + _languageType);
+         }
          return result;
       }
 
@@ -320,21 +335,6 @@ import com.brightworks.lessoncreator.constants.Constants_ProductionScript;
                break;
             default:
                Log.error("ProductionScript_Lesson.getAudioRecordingAgreementText(): No match for langCode of: " + ProductionScript.getAudioRecordingISO639_3LanguageCode(_languageType, _scriptAnalyzer));
-         }
-         return result;
-      }
-
-      private function getAudioRecordingPaidForUnit():String {
-         var result:String;
-         switch (_languageType) {
-            case Constants_ProductionScript.LANGUAGE_TYPE__NATIVE:
-               result = audioRecordingPaidForUnit_NativeLanguage;
-               break;
-            case Constants_ProductionScript.LANGUAGE_TYPE__TARGET:
-               result = audioRecordingPaidForUnit_TargetLanguage;
-               break;
-            default:
-               Log.error("ProductionScript_Lesson.getAudioRecordingPaidForUnit(): No match for _languageType of: " + _languageType);
          }
          return result;
       }

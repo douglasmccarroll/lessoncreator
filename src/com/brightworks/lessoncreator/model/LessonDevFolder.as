@@ -268,10 +268,6 @@ package com.brightworks.lessoncreator.model {
          return getSubfolder(Constants_Misc.LESSON_DEV_FOLDER__SUBFOLDER_NAME__CREDITS);
       }
 
-      public function getSubfolder_mp3():File {
-         return getSubfolder(Constants_Misc.LESSON_DEV_FOLDER__SUBFOLDER_NAME__MP3);
-      }
-
       public function getSubfolder_script():File {
          return getSubfolder(Constants_Misc.LESSON_DEV_FOLDER__SUBFOLDER_NAME__SCRIPT);
       }
