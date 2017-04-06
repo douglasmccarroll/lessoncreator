@@ -1,6 +1,5 @@
 package com.brightworks.lessoncreator.util.singleton {
    import com.brightworks.lessoncreator.model.MainModel;
-   import com.brightworks.util.AppUseAnalytics;
    import com.brightworks.util.Log;
    import com.brightworks.util.PerformanceAnalyzer;
    import com.brightworks.util.Utils_DateTime;
@@ -15,7 +14,6 @@ package com.brightworks.lessoncreator.util.singleton {
          singletonClassList = [
             Log,
             Utils_DateTime,
-            AppUseAnalytics,
             MainModel,
             PerformanceAnalyzer
          ]

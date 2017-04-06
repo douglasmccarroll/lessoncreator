@@ -172,6 +172,17 @@ package com.brightworks.lessoncreator.model {
             return null;
       }
 
+      public function getFile_xml__in_build_folder():File {
+         if (!getSubfolder_build())
+            return null;
+         var f:File = getSubfolder_build().resolvePath(getFileName_xml());
+         if (f.exists) {
+            return f;
+         } else {
+            return null;
+         }
+      }
+
       public function getFileName_credits():String {
          return lessonId + "." + Constants_Misc.FILE_NAME_EXTENSION__LESSON_CREDITS_FILE;
       }
@@ -290,7 +301,7 @@ package com.brightworks.lessoncreator.model {
       public function updateXmlFileIfScriptFileIsProblemFree():void {
          if (!doesProblemFreeScriptFileExist())
             return;
-         writeXmlFile(lessonXml.toXMLString());
+         writeXmlFiles(lessonXml.toXMLString());
       }
 
       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -484,8 +495,9 @@ package com.brightworks.lessoncreator.model {
          Utils_File.writeTextFile(getFile_script(), s);
       }
 
-      private function writeXmlFile(s:String):void {
-         var f:File = getFile_xml();
+      private function writeXmlFiles(s:String):void {
+         var f:File;
+         f = getFile_xml();
          if (f) {
             Utils_File.writeTextFile(f, s);
          } else {
@@ -493,6 +505,13 @@ package com.brightworks.lessoncreator.model {
                Log.warn("LessonDevFolder.writeXmlFile(): Can't obtain file yet file count in folder > 0")
             }
             f = getSubfolder_xml().resolvePath(getFileName_xml());
+            Utils_File.writeTextFile(f, s);
+         }
+         f = getFile_xml__in_build_folder();
+         if (f) {
+            Utils_File.writeTextFile(f, s);
+         } else {
+            f = getSubfolder_build().resolvePath(getFileName_xml());
             Utils_File.writeTextFile(f, s);
          }
       }
