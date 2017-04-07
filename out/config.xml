@@ -96,14 +96,22 @@
     </voiceTalent>
 
     -->
-    <voiceTalent>
-      <displayName>English Sample</displayName>
-      <familyName>Sample</familyName>
-      <givenName>English</givenName>
-      <paymentCurrency>usa_dollars</paymentCurrency>
-      <paymentPerOrderBaseRate>11</paymentPerOrderBaseRate>
-      <paymentPerUnitRate>.024</paymentPerUnitRate>
-    </voiceTalent>
+      <voiceTalent>
+        <displayName>aaa</displayName>
+        <familyName>aaa</familyName>
+        <givenName>aaa</givenName>
+        <paymentCurrency>usa_dollars</paymentCurrency>
+        <paymentPerOrderBaseRate>0</paymentPerOrderBaseRate>
+        <paymentPerUnitRate>0</paymentPerUnitRate>
+      </voiceTalent>
+      <voiceTalent>
+        <displayName>English Sample</displayName>
+        <familyName>Sample</familyName>
+        <givenName>English</givenName>
+        <paymentCurrency>usa_dollars</paymentCurrency>
+        <paymentPerOrderBaseRate>11</paymentPerOrderBaseRate>
+        <paymentPerUnitRate>.024</paymentPerUnitRate>
+      </voiceTalent>
     <voiceTalent>
       <displayName>Chinese 1.1</displayName>
       <familyName>1.1</familyName>
@@ -126,16 +134,7 @@
       <givenName>Mao</givenName>
       <paymentCurrency>renminbi</paymentCurrency>
       <paymentPerOrderBaseRate>60</paymentPerOrderBaseRate>
-      <paymentPerOrderMinimum>0</paymentPerOrderMinimum>
-      <paymentPerUnitRate>.054</paymentPerUnitRate>
-    </voiceTalent>
-    <voiceTalent>
-      <displayName>Tony Pettit</displayName>
-      <familyName>Pettit</familyName>
-      <givenName>Tony</givenName>
-      <paymentCurrency>usa_dollars</paymentCurrency>
-      <paymentPerOrderBaseRate>11</paymentPerOrderBaseRate>
-      <paymentPerUnitRate>.024</paymentPerUnitRate>
+      <paymentPerUnitRate>.096</paymentPerUnitRate>
     </voiceTalent>
     <voiceTalent>
       <displayName>Liu Songrui</displayName>
@@ -150,8 +149,7 @@
       <familyName>Shapiro</familyName>
       <givenName>Dan</givenName>
       <paymentCurrency>usa_dollars</paymentCurrency>
-      <paymentPerOrderBaseRate>8</paymentPerOrderBaseRate>
-      <paymentPerOrderMinimum>12</paymentPerOrderMinimum>
+      <paymentPerOrderBaseRate>12</paymentPerOrderBaseRate>
       <paymentPerUnitRate>.025</paymentPerUnitRate>
     </voiceTalent>
     <voiceTalent>
@@ -159,8 +157,7 @@
       <familyName>Shi</familyName>
       <givenName>Tongyun</givenName>
       <paymentCurrency>usa_dollars</paymentCurrency>
-      <paymentPerOrderBaseRate>8.8</paymentPerOrderBaseRate>
-      <paymentPerOrderMinimum>12</paymentPerOrderMinimum>
+      <paymentPerOrderBaseRate>12</paymentPerOrderBaseRate>
       <paymentPerUnitRate>.028</paymentPerUnitRate>
     </voiceTalent>
     <voiceTalent>
@@ -172,22 +169,13 @@
       <paymentPerUnitRate>.024</paymentPerUnitRate>
     </voiceTalent>
     <voiceTalent>
-      <displayName>Transtar Media - Sam</displayName>
+      <displayName>Transtar Media - Lulu</displayName>
       <familyName>Transtar</familyName>
-      <givenName>Sam</givenName>
+      <givenName>Lulu</givenName>
       <displayFullPaymentDetail>false</displayFullPaymentDetail>
       <paymentCurrency>usa_dollars</paymentCurrency>
       <paymentPerOrderBaseRate>11</paymentPerOrderBaseRate>
       <paymentPerUnitRate>.018</paymentPerUnitRate>
-    </voiceTalent>
-    <voiceTalent>
-      <displayName>Vera Yu</displayName>
-      <familyName>Yu</familyName>
-      <givenName>Vera</givenName>
-      <paymentCurrency>usa_dollars</paymentCurrency>
-      <paymentPerOrderBaseRate>8.8</paymentPerOrderBaseRate>
-      <paymentPerOrderMinimum>12</paymentPerOrderMinimum>
-      <paymentPerUnitRate>.028</paymentPerUnitRate>
     </voiceTalent>
     <voiceTalent>
       <displayName>Ye Ziyou</displayName>
@@ -195,7 +183,6 @@
       <givenName>Ziyou</givenName>
       <paymentCurrency>renminbi</paymentCurrency>
       <paymentPerOrderBaseRate>60</paymentPerOrderBaseRate>
-      <paymentPerOrderMinimum>0</paymentPerOrderMinimum>
       <paymentPerUnitRate>.096</paymentPerUnitRate>
     </voiceTalent>
     <voiceTalent>
@@ -204,7 +191,6 @@
       <givenName>Xiaoai</givenName>
       <paymentCurrency>renminbi</paymentCurrency>
       <paymentPerOrderBaseRate>60</paymentPerOrderBaseRate>
-      <paymentPerOrderMinimum>0</paymentPerOrderMinimum>
       <paymentPerUnitRate>.096</paymentPerUnitRate>
     </voiceTalent>
     <voiceTalent>
@@ -213,8 +199,7 @@
       <givenName>Liwei</givenName>
       <paymentCurrency>renminbi</paymentCurrency>
       <paymentPerOrderBaseRate>60</paymentPerOrderBaseRate>
-      <paymentPerOrderMinimum>0</paymentPerOrderMinimum>
-      <paymentPerUnitRate>.054</paymentPerUnitRate>
+      <paymentPerUnitRate>.096</paymentPerUnitRate>
     </voiceTalent>
   </voiceTalents>
   <contentRestrictions>
@@ -1155,7 +1140,7 @@
               </translation>
               <translation>
                 <from>xiang3</from>
-                <to>think,thinking,would like to,I'd like to,would you like to,wouldn't you like to,not - like to,don't you - like to,you'd like to</to>
+                <to>think,thinking,would like to,I'd like,I'd like to,would you like,would you like to,wouldn't you like to,not - like to,don't you - like to,you'd like to</to>
               </translation>
               <translation>
                 <from>xiang3yao4</from>
