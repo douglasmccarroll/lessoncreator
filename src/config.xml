@@ -21,6 +21,26 @@
       </remoteFolder>
     </library>
     <library>
+      <id>com.mydomain</id>
+      <localFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/mydomain</localFolderPath>
+      <remoteFolder>
+        <host>lessons.languagecollaborative.com</host>
+        <folderPath>/home/langcollab_ftp/lessons.languagecollaborative.com/mydomain</folderPath>
+        <userName>langcollab_ftp</userName>
+        <protocol>SFTP</protocol>
+      </remoteFolder>
+    </library>
+    <library>
+      <id>info.businesschinese</id>
+      <localFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/businesschinese</localFolderPath>
+      <remoteFolder>
+        <host>lessons.languagecollaborative.com</host>
+        <folderPath>/home/langcollab_ftp/lessons.languagecollaborative.com/businesschinese</folderPath>
+        <userName>langcollab_ftp</userName>
+        <protocol>SFTP</protocol>
+      </remoteFolder>
+    </library>
+    <library>
       <id>info.renhuibo</id>
       <localFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/renhuibo</localFolderPath>
       <remoteFolder>
@@ -266,6 +286,13 @@
     </restriction>
     <restriction>
       <content>bu4 shi4</content>
+      <caseSensitive>false</caseSensitive>
+      <replacementOptions>
+        <option></option>
+      </replacementOptions>
+    </restriction>
+    <restriction>
+      <content>bu4cuo4</content>
       <caseSensitive>false</caseSensitive>
       <replacementOptions>
         <option></option>
@@ -1088,7 +1115,7 @@
               </translation>
               <translation>
                 <from>kuai4</from>
-                <to>RMB,quick,quickly,fast</to>
+                <to>RMB,quick,quickly,fast,now</to>
               </translation>
               <translation>
                 <from>Lian4shu1</from>

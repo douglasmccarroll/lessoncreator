@@ -199,7 +199,7 @@ package com.brightworks.lessoncreator.model {
          init(); // This creates a new script analyzer, etc (if script file exists) every time this method is called, so it's distinctly inefficient. But it makes our code simpler to simply do this each time, unless/until we see performance problems.
          var result:ArrayCollection = new ArrayCollection();
          var problem:LessonProblem;
-         problem = checkForMissingRequiredSubfolders();
+         problem = checkForMissingRequiredSubfoldersAndAttemptToCreateIfMissing();
          if (problem)
             result.addItem(problem);
          problem = checkForSubfoldersInRequiredFolders();
@@ -371,12 +371,12 @@ package com.brightworks.lessoncreator.model {
          return problem;
       }
 
-      private function checkForMissingRequiredSubfolders():LessonProblem {
+      private function checkForMissingRequiredSubfoldersAndAttemptToCreateIfMissing():LessonProblem {
          if (doesFolderContainAllRequiredLessonDevFolderSubfolders())
             return null;
          var missingSubfolderList:Array = getListOfRequiredLessonDevFolderSubfoldersMissingInFolder();
          var subfolderOrSubfolders:String = (missingSubfolderList.length > 1) ? "subfolders" : "subfolder";
-         var problemDescription:String = "Missing required " + subfolderOrSubfolders + ": ";
+         var problemDescription:String = "Missing, and cannot create, one or more of these required " + subfolderOrSubfolders + ": ";
          var isFirstInList:Boolean = true;
          for each (var subfolderName:String in missingSubfolderList) {
             if (!isFirstInList) {
@@ -385,13 +385,18 @@ package com.brightworks.lessoncreator.model {
             problemDescription += '"' + subfolderName + '"';
             isFirstInList = false;
          }
+         var fix:Fix_Lesson_MissingRequiredSubfolders = new Fix_Lesson_MissingRequiredSubfolders();
          var problem:LessonProblem =
-            new LessonProblem(
-            this,
-            problemDescription,
-            LessonProblem.PROBLEM_TYPE__MISSING_REQUIRED_SUBFOLDERS,
-            LessonProblem.PROBLEM_LEVEL__IMPEDIMENT,
-            new Fix_Lesson_MissingRequiredSubfolders());
+               new LessonProblem(
+                     this,
+                     problemDescription,
+                     LessonProblem.PROBLEM_TYPE__REQUIRED_SUBFOLDERS_MISSING_AND_CANNOT_BE_CREATED,
+                     LessonProblem.PROBLEM_LEVEL__IMPEDIMENT,
+                     fix);
+         var success:Boolean = fix.fix(this, problem);
+         if (success) {
+            return null;
+         }
          return problem;
       }
 
