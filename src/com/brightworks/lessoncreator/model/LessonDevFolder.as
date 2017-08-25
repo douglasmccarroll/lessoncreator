@@ -30,6 +30,13 @@ package com.brightworks.lessoncreator.model {
       //
       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
+      public function get lessonBlogText():String {
+         if (!doesProblemFreeScriptFileExist())
+            return null;
+         var blogTextCreator:BlogTextCreator = new BlogTextCreator(this);
+         return blogTextCreator.blogText;
+      }
+
       public function get lessonXml():XML {
          if (!doesProblemFreeScriptFileExist())
             return null;
@@ -136,6 +143,18 @@ package com.brightworks.lessoncreator.model {
          return true;
       }
 
+      public function getFile_blog():File {
+         if (!getSubfolder_blog())
+            return null;
+         if (Utils_File.getCountOfFilesInFolder(getSubfolder_blog(), false) != 1)
+            return null;
+         var file:File = Utils_File.getSingleFileInFolder(getSubfolder_blog());
+         if (file.name == getFileName_blog())
+            return file;
+         else
+            return null;
+      }
+
       public function getFile_credits():File {
          if (!getSubfolder_credits())
             return null;
@@ -181,6 +200,10 @@ package com.brightworks.lessoncreator.model {
          } else {
             return null;
          }
+      }
+
+      public function getFileName_blog():String {
+         return lessonId + "." + Constants_Misc.FILE_NAME_EXTENSION__LESSON_BLOG_FILE;
       }
 
       public function getFileName_credits():String {
@@ -271,6 +294,10 @@ package com.brightworks.lessoncreator.model {
          return result;
       }
 
+      public function getSubfolder_blog():File {
+         return getSubfolder(Constants_Misc.LESSON_DEV_FOLDER__SUBFOLDER_NAME__BLOG);
+      }
+
       public function getSubfolder_build():File {
          return getSubfolder(Constants_Misc.LESSON_DEV_FOLDER__SUBFOLDER_NAME__BUILD);
       }
@@ -294,8 +321,15 @@ package com.brightworks.lessoncreator.model {
       public function refresh():void {
          if (getLessonProblemList().length == 0) {
             // getLessonProblemList() call updates script analyzer, so we'll be writing current info here...
+            updateBlogFileIfScriptFileIsProblemFree();
             updateXmlFileIfScriptFileIsProblemFree();
          }
+      }
+
+      public function updateBlogFileIfScriptFileIsProblemFree():void {
+         if (!doesProblemFreeScriptFileExist())
+            return;
+         writeBlogFile(lessonBlogText);
       }
 
       public function updateXmlFileIfScriptFileIsProblemFree():void {
@@ -494,6 +528,20 @@ package com.brightworks.lessoncreator.model {
       private function readScriptTextFromFile():String {
          var result:String = Utils_File.readTextFile(getFile_script());
          return result;
+      }
+
+      private function writeBlogFile(s:String):void {
+         var f:File;
+         f = getFile_blog();
+         if (f) {
+            Utils_File.writeTextFile(f, s);
+         } else {
+            if (Utils_File.getCountOfFilesInFolder(getSubfolder_blog(), false) > 0) {
+               Log.warn("LessonDevFolder.writeBlogFile(): Can't obtain file yet file count in folder > 0")
+            }
+            f = getSubfolder_blog().resolvePath(getFileName_blog());
+            Utils_File.writeTextFile(f, s);
+         }
       }
 
       private function writeScriptFile(s:String):void {

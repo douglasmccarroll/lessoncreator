@@ -63,7 +63,7 @@ import com.brightworks.util.Log;
          if (!_lineInfoList)
             throw new Error("Analyzer_ScriptChunk.getAnalyzer_ScriptLine(): _lineInfoList is null");
          if (!_lineInfoList.hasOwnProperty(lineType))
-            throw new Error("Analyzer_ScriptChunk.getAnalyzer_ScriptLine(): _lineInfoList has no " + lineType + " property");
+            return null;   // This is usually the case when the line-type is 'note'
          var result:Analyzer_ScriptLine = _lineInfoList[lineType];
          return result;
       }
@@ -95,12 +95,18 @@ import com.brightworks.util.Log;
 
       public function getLineText(lineType:String):String {
          var la:Analyzer_ScriptLine = getAnalyzer_ScriptLine(lineType);
-         var result:String = la.lineText;
+         var result:String;
+         if (la)
+               result = la.lineText
          return result;
       }
 
       public function getLineText_Native():String {
          return getLineText(Constants_LineType.LINE_TYPE_ID__CHUNK__NATIVE_LANGUAGE);
+      }
+
+      public function getLineText_Note():String {
+         return getLineText(Constants_LineType.LINE_TYPE_ID__CHUNK__NOTE);
       }
 
       public function getLineText_Target():String {

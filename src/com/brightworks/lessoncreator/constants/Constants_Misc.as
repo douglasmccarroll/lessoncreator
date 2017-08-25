@@ -1,11 +1,13 @@
 package com.brightworks.lessoncreator.constants {
 
    public class Constants_Misc {
+      public static const FILE_NAME_EXTENSION__LESSON_BLOG_FILE:String = "blog.txt";
       public static const FILE_NAME_EXTENSION__LESSON_CREDITS_FILE:String = "credits.xml";
       public static const FILE_NAME_EXTENSION__LESSON_SCRIPT_FILE:String = "lmls";
       public static const FILE_NAME_EXTENSION__LESSON_XML_FILE:String = "xml";
       public static const IGNORE_PROBLEMS__USE_COMMENT_FOR_EXCEPTIONS_SENTENCE:String = 'If there is a good reason to make an exception to this rule, please explain it in a "HumanCheck: " comment.';
       public static const LESSON_DEV_FOLDER__SUBFOLDER_NAME__LIST:Array = ["blog", "build", "credits", "script", "wav", "xml"];
+      public static const LESSON_DEV_FOLDER__SUBFOLDER_NAME__BLOG:String = "blog";
       public static const LESSON_DEV_FOLDER__SUBFOLDER_NAME__BUILD:String = "build";
       public static const LESSON_DEV_FOLDER__SUBFOLDER_NAME__CREDITS:String = "credits";
       public static const LESSON_DEV_FOLDER__SUBFOLDER_NAME__SCRIPT:String = "script";
