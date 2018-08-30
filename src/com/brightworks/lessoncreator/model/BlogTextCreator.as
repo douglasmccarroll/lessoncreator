@@ -37,7 +37,7 @@ public class BlogTextCreator {
          var chunkAnalyzer:Analyzer_ScriptChunk = _scriptAnalyzer.getChunkAnalyzer(chunkNum);
          if (currChunkRoleName != chunkAnalyzer.roleName) {
             currChunkRoleName = chunkAnalyzer.roleName;
-            result += chunkAnalyzer.roleName + ":\n\n";
+            result += chunkAnalyzer.roleName + ":\n \n";     // We include a space here because some blog platforms interpret a lone "\n" as a paragraph break, and we want a simple blank line
          }
          result += createScriptText_Chunk(chunkAnalyzer);
       }
