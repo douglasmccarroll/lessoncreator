@@ -27,7 +27,7 @@ import spark.components.Button;
 
       private var _button_DeployLesson:Button;
       private var _button_Refresh:Button;
-      private var _currentActiveDeplayLessonCommands:Dictionary = new Dictionary();
+      private var _currentActiveDeployLessonCommands:Dictionary = new Dictionary();
       private var _footer:HGroup;
       private var _header:HGroup;
       private var _headerCenterSpacer:Spacer;
@@ -163,18 +163,18 @@ import spark.components.Button;
 
       private function onDeployLessonButtonClick(event:Event):void {
           var command:Command_DeployLesson = new Command_DeployLesson(_lessonDevFolder, new Callbacks(onDeployLessonCommandComplete, onDeployLessonCommandFailure));
-          _currentActiveDeplayLessonCommands[_lessonDevFolder] = command;
+          _currentActiveDeployLessonCommands[_lessonDevFolder] = command;
           command.execute();
       }
 
       private function onDeployLessonCommandComplete(command:Command_DeployLesson):void {
-         delete _currentActiveDeplayLessonCommands[command.lessonDevFolder];
+         delete _currentActiveDeployLessonCommands[command.lessonDevFolder];
       }
 
       private function onDeployLessonCommandFailure(command:Command_DeployLesson):void {
          // TODO - handle in a more user-friendly way - reason for failure, etc.
          Alert.show("Deploy Lesson failed: " + command.lessonDevFolder.lessonId);
-         delete _currentActiveDeplayLessonCommands[command.lessonDevFolder];
+         delete _currentActiveDeployLessonCommands[command.lessonDevFolder];
       }
 
       private function onRefreshButtonClick(event:MouseEvent):void {
