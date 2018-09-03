@@ -2,17 +2,20 @@
   <!--
     Content Restrictions and Translations are in alphabetical order.
     Alphabetization rules/order: space char, then letters, then numbers
-  -->
+
   <lessonDevWorkspaces>
     <lessonDevWorkspace>
-      <displayName>Brightworks</displayName>
+      <displayName>bbb</displayName>
       <folderPath>/Users/douglasmccarroll/_langmentor/Lesson Development</folderPath>
     </lessonDevWorkspace>
   </lessonDevWorkspaces>
+  -->
   <libraries>
     <library>
-      <id>com.languagecollaborative</id>
-      <localFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/langcollab</localFolderPath>
+      <id>com.languagecollaborative.cmn_eng</id>
+      <displayName>Language Collaborative - Mandarin Chinese</displayName>
+	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/cmn_langcollab</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/langcollab</stagingFolderPath>
       <remoteFolder>
         <host>lessons.languagecollaborative.com</host>
         <folderPath>/home/langcollab_ftp/lessons.languagecollaborative.com/langcollab</folderPath>
@@ -21,18 +24,10 @@
       </remoteFolder>
     </library>
     <library>
-      <id>com.mydomain</id>
-      <localFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/mydomain</localFolderPath>
-      <remoteFolder>
-        <host>lessons.languagecollaborative.com</host>
-        <folderPath>/home/langcollab_ftp/lessons.languagecollaborative.com/mydomain</folderPath>
-        <userName>langcollab_ftp</userName>
-        <protocol>SFTP</protocol>
-      </remoteFolder>
-    </library>
-    <library>
       <id>info.businesschinese</id>
-      <localFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/businesschinese</localFolderPath>
+      <displayName>Business Chinese</displayName>
+	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/cmn_business_chinese</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/businesschinese</stagingFolderPath>
       <remoteFolder>
         <host>lessons.languagecollaborative.com</host>
         <folderPath>/home/langcollab_ftp/lessons.languagecollaborative.com/businesschinese</folderPath>
@@ -42,7 +37,9 @@
     </library>
     <library>
       <id>info.renhuibo</id>
-      <localFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/renhuibo</localFolderPath>
+      <displayName>Ren Huibo</displayName>
+	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/cmn_ren_huibo</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/renhuibo</stagingFolderPath>
       <remoteFolder>
         <host>lessons.languagecollaborative.com</host>
         <folderPath>/home/langcollab_ftp/lessons.languagecollaborative.com/renhuibo</folderPath>
@@ -52,7 +49,9 @@
     </library>
     <library>
       <id>info.xiaina</id>
-      <localFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/xiaina</localFolderPath>
+      <displayName>Xi Aina</displayName>
+	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/cmn_xi_aina</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/xiaina</stagingFolderPath>
       <remoteFolder>
         <host>lessons.languagecollaborative.com</host>
         <folderPath>/home/langcollab_ftp/lessons.languagecollaborative.com/xiaina</folderPath>
@@ -62,7 +61,9 @@
     </library>
     <library>
       <id>info.zhangqiwei</id>
-      <localFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/zhangqiwei</localFolderPath>
+      <displayName>Zhang Qiwei</displayName>
+	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/cmn_zhang_qiwei</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/zhangqiwei</stagingFolderPath>
       <remoteFolder>
         <host>lessons.languagecollaborative.com</host>
         <folderPath>/home/langcollab_ftp/lessons.languagecollaborative.com/zhangqiwei</folderPath>
@@ -70,8 +71,33 @@
         <protocol>SFTP</protocol>
       </remoteFolder>
     </library>
+	
+	
+    <library>
+      <id>com.languagecollaborative.deu_eng</id>
+      <displayName>Language Collaborative - German</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/deu_langcollab</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lessons.languagecollaborative.com/langcollab</stagingFolderPath>
+    </library>
+    <library>
+      <id>com.douglasmccarroll.deu_neue_horizonte</id>
+      <displayName>Neue Horizonte</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/deu_neue_horizonte</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lm.langcollab.com/nh</stagingFolderPath>
+    </library>
+    <library>
+      <id>com.douglasmccarroll.deu_pers</id>
+      <displayName>Douglas - German</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/deu_mccadoug</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/lm.langcollab.com/mccadoug</stagingFolderPath>
+    </library>
   </libraries>
+  
+  
+  
+  
   <productionScriptFolder>/Users/douglasmccarroll/_talent/Scripts</productionScriptFolder>  
+  
   <voiceTalents>
     <!--
       

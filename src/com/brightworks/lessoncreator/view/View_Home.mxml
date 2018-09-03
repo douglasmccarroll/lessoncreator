@@ -50,7 +50,6 @@
 
       private function onInitialize():void {
          initializeLessonDevFolderDataGrid();
-         refreshLessonDevFolderDataGrid();
       }
 
       private function onLessonDevFolderDataGridSelectionChange():void {
@@ -61,7 +60,8 @@
             newFolder.refresh();
       }
 
-      private function onLessonDevWorkspaceComboBoxChange():void {
+      private function onLibraryComboBoxChange():void {
+         model.currentLessonLibrary = libraryComboBox.selectedItem;
          refreshLessonDevFolderDataGrid();
       }
 
@@ -81,11 +81,11 @@
              width = "100%">
       <s:VGroup height = "100%"
                 width = "400">
-         <s:ComboBox id = "lessonDevWorkspaceComboBox"
-                     change = "onLessonDevWorkspaceComboBoxChange()"
-                     dataProvider = "{model.lessonDevWorkspaceList}"
+         <s:ComboBox id ="libraryComboBox"
+                     change = "onLibraryComboBoxChange()"
+                     dataProvider = "{model.lessonLibraryList}"
                      labelField = "displayName"
-                     selectedItem = "{model.currentLessonDevWorkspace}"
+                     selectedItem = "{model.currentLessonLibrary}"
                      width = "100%" />
          <s:Spacer />
          <s:DataGrid id = "lessonDevFolderDataGrid"

@@ -7,85 +7,85 @@
 
    <fx:Script>
       <![CDATA[
-         import com.brightworks.lessoncreator.model.LessonDevFolder;
-         import com.brightworks.lessoncreator.util.scriptsearch.ScriptSearchResult;
-         import com.brightworks.util.Utils_DataConversionComparison;
+       import com.brightworks.lessoncreator.model.LessonDevFolder;
+       import com.brightworks.lessoncreator.util.scriptsearch.ScriptSearchResult;
+       import com.brightworks.util.Utils_DataConversionComparison;
 
-         import mx.collections.ArrayCollection;
+       import mx.collections.ArrayCollection;
 
-         import spark.components.gridClasses.GridColumn;
+       import spark.components.gridClasses.GridColumn;
 
-         [Bindable]
-         private var _resultsDataGridDataProvider:ArrayCollection;
+       [Bindable]
+       private var _resultsDataGridDataProvider:ArrayCollection;
 
-         private function initGridColumns():void {
-            var columns:ArrayCollection = new ArrayCollection();
-            var column:GridColumn;
-            column = new GridColumn();
-            column.dataField = "lessonId";
-            column.headerText = "Lesson ID";
-            column.width = 400;
-            columns.addItem(column);
-            column = new GridColumn();
-            column.labelFunction = labelFunction_scriptValidityColumn;
-            column.headerText = "";
-            column.width = 21;
-            columns.addItem(column);
-            column = new GridColumn();
-            column.dataField = "lineNumber";
-            column.headerText = "Line Number";
-            column.width = 90;
-            columns.addItem(column);
-            column = new GridColumn();
-            column.dataField = "lineText";
-            column.headerText = "";
-            columns.addItem(column);
-            resultsDataGrid.columns = columns;
-         }
+       private function initGridColumns():void {
+           var columns:ArrayCollection = new ArrayCollection();
+           var column:GridColumn;
+           column = new GridColumn();
+           column.dataField = "lessonId";
+           column.headerText = "Lesson ID";
+           column.width = 400;
+           columns.addItem(column);
+           column = new GridColumn();
+           column.labelFunction = labelFunction_scriptValidityColumn;
+           column.headerText = "";
+           column.width = 21;
+           columns.addItem(column);
+           column = new GridColumn();
+           column.dataField = "lineNumber";
+           column.headerText = "Line Number";
+           column.width = 90;
+           columns.addItem(column);
+           column = new GridColumn();
+           column.dataField = "lineText";
+           column.headerText = "";
+           columns.addItem(column);
+           resultsDataGrid.columns = columns;
+       }
 
-         private function labelFunction_scriptValidityColumn(item:Object, column:GridColumn):String {
-            if (ScriptSearchResult(item).isLessonScriptProblemFree) {
+       private function labelFunction_scriptValidityColumn(item:Object, column:GridColumn):String {
+           if (ScriptSearchResult(item).isLessonScriptProblemFree) {
                return "";
-            } else {
+           } else {
                return "X";
-            }
-         }
+           }
+       }
 
-         private function onInitialize():void {
-            initGridColumns();
-         }
+       private function onInitialize():void {
+           initGridColumns();
+       }
 
-         private function onSearchButtonClick():void {
-            var caseSensitiveSearch:Boolean = caseSensitiveCheckBox.selected;
-            var searchText:String = caseSensitiveSearch ? searchStringTextInput.text : searchStringTextInput.text.toLowerCase();
-            var resultsList:ArrayCollection = new ArrayCollection();
-            var devFolderList:ArrayCollection = model.currentLessonDevFolderList;
-            for each (var lessonDevFolder:LessonDevFolder in devFolderList) {
+       private function onSearchButtonClick():void {
+           var caseSensitiveSearch:Boolean = caseSensitiveCheckBox.selected;
+           var searchText:String = caseSensitiveSearch ? searchStringTextInput.text : searchStringTextInput.text.toLowerCase();
+           var resultsList:ArrayCollection = new ArrayCollection();
+           var devFolderList:ArrayCollection = model.currentLessonDevFolderList;
+           for each (var lessonDevFolder:LessonDevFolder in devFolderList) {
                if (!lessonDevFolder.scriptText)
-                  continue;
+                   continue;
                var lineStringList:Array = Utils_DataConversionComparison.convertStringToArrayOfLineStrings(lessonDevFolder.scriptText, true)
                for (var i:uint = 0; i < lineStringList.length; i++) {
-                  var lineText:String = lineStringList[i];
-                  if (!caseSensitiveSearch) {
-                     lineText = lineText.toLowerCase();
-                  }
-                  if (lineText.indexOf(searchText) != -1) {
-                     var result:ScriptSearchResult = new ScriptSearchResult();
-                     result.isLessonScriptProblemFree = lessonDevFolder.doesProblemFreeScriptFileExist();
-                     result.lessonId = lessonDevFolder.lessonId;
-                     result.lineNumber = i + 1;
-                     result.lineText = lineStringList[i];
-                     resultsList.addItem(result);
-                  }
+                   var lineText:String = lineStringList[i];
+                   if (!caseSensitiveSearch) {
+                       lineText = lineText.toLowerCase();
+                   }
+                   if (lineText.indexOf(searchText) != -1) {
+                       var result:ScriptSearchResult = new ScriptSearchResult();
+                       result.isLessonScriptProblemFree = lessonDevFolder.doesProblemFreeScriptFileExist();
+                       result.lessonId = lessonDevFolder.lessonId;
+                       result.lineNumber = i + 1;
+                       result.lineText = lineStringList[i];
+                       resultsList.addItem(result);
+                   }
                }
-            }
-            _resultsDataGridDataProvider = resultsList;
-            if (resultsList.length > 0)
+           }
+           _resultsDataGridDataProvider = resultsList;
+           if (resultsList.length > 0)
                viewStack.selectedChild = viewStackView_ResultsGrid;
-            else
+           else
                viewStack.selectedChild = viewStackView_NoResultsFound;
-         }
-      ]]>
+       }
+       ]]>
    </fx:Script>
 
    <s:HGroup height = "100%"

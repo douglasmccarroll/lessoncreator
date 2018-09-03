@@ -44,7 +44,7 @@
       }
 
       private function onKeyDown(event:KeyboardEvent):void {
-            trace(event.keyCode);// 16 = ~
+         // trace(event.keyCode);// 16 = ~
          if ((event.shiftKey) && (event.keyCode == 192)) {
             FlexSpy.show();
          }
