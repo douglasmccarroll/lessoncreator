@@ -153,19 +153,11 @@ import com.brightworks.lessoncreator.analyzers.Analyzer_Script;
          }
          result += "Per-order payment: " + adornPaymentAmountWithCurrencyUnit(voiceTalent.paymentPerOrderBaseRate, voiceTalent.paymentCurrency) + "\n";
          totalPayment += voiceTalent.paymentPerOrderBaseRate;
-         if (totalPayment >= voiceTalent.paymentPerOrderMinimum) {
-            result +=
-                  "Total payment: " +
-                  " " +
-                  adornPaymentAmountWithCurrencyUnit(totalPayment, voiceTalent.paymentCurrency) +
-                  "\n";
-         } else {
-            result +=
-                  "Total payment (based on minimum): " +
-                  " " +
-                  adornPaymentAmountWithCurrencyUnit(voiceTalent.paymentPerOrderMinimum, voiceTalent.paymentCurrency) +
-                  "\n";
-         }
+         result +=
+               "Total payment: " +
+               " " +
+               adornPaymentAmountWithCurrencyUnit(totalPayment, voiceTalent.paymentCurrency) +
+               "\n";
          result +=
                "\n" +
                "Total " +

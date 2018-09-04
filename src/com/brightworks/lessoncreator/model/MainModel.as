@@ -208,11 +208,6 @@ public class MainModel extends EventDispatcher implements IManagedSingleton {
             if (XMLList(voiceTalentXml.displayFullPaymentDetail).length() > 0) {
                 displayFullPaymentDetail = Utils_XML.readBooleanNode(voiceTalentXml.displayFullPaymentDetail[0]);
             }
-            // paymentPerOrderMinimum is deprecated/legacy
-            var paymentPerOrderMinimum:Number = 0;
-            if (XMLList(voiceTalentXml.paymentPerOrderMinimum).length() > 0) {
-                paymentPerOrderMinimum = Utils_XML.readNumberNode(voiceTalentXml.paymentPerOrderMinimum[0]);
-            }
             voiceTalent = new VoiceTalent(
                     voiceTalentXml.familyName[0].toString(),
                     voiceTalentXml.givenName[0].toString(),
@@ -220,7 +215,6 @@ public class MainModel extends EventDispatcher implements IManagedSingleton {
                     displayFullPaymentDetail,
                     voiceTalentXml.paymentCurrency[0].toString(),
                     Utils_XML.readNumberNode(voiceTalentXml.paymentPerOrderBaseRate[0]),
-                    paymentPerOrderMinimum,
                     Utils_XML.readNumberNode(voiceTalentXml.paymentPerUnitRate[0]));
             voiceTalentList.addItem(voiceTalent);
         }

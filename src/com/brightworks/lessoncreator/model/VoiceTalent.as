@@ -9,7 +9,6 @@ import flash.net.registerClassAlias;
       public var name_Given:String;
       public var displayFullPaymentDetail:Boolean;
       public var paymentCurrency:String;
-      public var paymentPerOrderMinimum:Number;
       public var paymentPerUnitRate:Number;
 
       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -46,7 +45,6 @@ import flash.net.registerClassAlias;
          displayFullPaymentDetail:Boolean,
          paymentCurrency:String,
          paymentPerOrderBaseRate:Number,
-         paymentPerOrderMinimum:Number,
          paymentPerUnitRate:Number) {
          this.displayFullPaymentDetail = displayFullPaymentDetail;
          this.name_Display = name_Display;
@@ -54,7 +52,6 @@ import flash.net.registerClassAlias;
          this.name_Given = name_Given;
          this.paymentCurrency = paymentCurrency;
          this.paymentPerOrderBaseRate = paymentPerOrderBaseRate;
-         this.paymentPerOrderMinimum = paymentPerOrderMinimum;
          this.paymentPerUnitRate = paymentPerUnitRate;
       }
    }
