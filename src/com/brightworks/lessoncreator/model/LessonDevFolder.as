@@ -243,9 +243,16 @@ package com.brightworks.lessoncreator.model {
             if (problem) {
                result.addItem(problem);
             } else if (Utils_File.getCountOfFilesInFolder(getSubfolder_script(), false) == 1) {
-               problem = checkScriptFileName();
-               if (problem)
+               var file:File = Utils_File.getSingleFileInFolder(getSubfolder_script());
+               if (file.name != getFileName_script()) {
+                  problem = new LessonProblem(
+                        this,
+                        "Incorrect script file name",
+                        LessonProblem.PROBLEM_TYPE__INCORRECT_SCRIPT_FILE_NAME,
+                        LessonProblem.PROBLEM_LEVEL__IMPEDIMENT,
+                        new Fix_Lesson_IncorrectFileName_Script());
                   result.addItem(problem);
+               }
             }
          }
          if (getSubfolder_xml()) {
@@ -441,7 +448,7 @@ package com.brightworks.lessoncreator.model {
          var subfolderOrSubfolders:String = (problematicSubfolderList.length > 1) ? "subfolders" : "subfolder";
          var problemDescription:String = "Required " + subfolderOrSubfolders + " containing subfolders: "
          var isFirstInList:Boolean = true;
-         for each (var sf:File in problematicSubfolderList) {
+         for each (var sf:String in problematicSubfolderList) {
             if (!isFirstInList) {
                problemDescription += ", ";
             }
@@ -454,20 +461,6 @@ package com.brightworks.lessoncreator.model {
             problemDescription,
             LessonProblem.PROBLEM_TYPE__REQUIRED_SUBFOLDERS_CONTAINING_SUBFOLDERS,
             LessonProblem.PROBLEM_LEVEL__WORRISOME);
-         return problem;
-      }
-
-      private function checkScriptFileName():LessonProblem {
-         var problem:LessonProblem;
-         var file:File = getFile_script();
-         if (file.name != getFileName_script()) {
-            problem = new LessonProblem(
-               this,
-               "Incorrect script file name",
-               LessonProblem.PROBLEM_TYPE__INCORRECT_SCRIPT_FILE_NAME,
-               LessonProblem.PROBLEM_LEVEL__IMPEDIMENT,
-               new Fix_Lesson_IncorrectFileName_Script());
-         }
          return problem;
       }
 

@@ -3,6 +3,7 @@ package com.brightworks.lessoncreator.analyzers {
    import com.brightworks.lessoncreator.fixes.Fix;
    import com.brightworks.lessoncreator.fixes.Fix_Line_ChunkEng_ContainsRestrictedContent;
    import com.brightworks.lessoncreator.fixes.Fix_Line_ChunkEng_IncorrectLineEnding;
+   import com.brightworks.lessoncreator.model.MainModel;
    import com.brightworks.lessoncreator.problems.LessonProblem;
    import com.brightworks.lessoncreator.util.contentrestriction.ContentRestriction;
    import com.brightworks.lessoncreator.util.contentrestriction.ContentRestrictionProcessor;
@@ -42,7 +43,7 @@ package com.brightworks.lessoncreator.analyzers {
                var fix:Fix = new Fix_Line_ChunkEng_IncorrectLineEnding(scriptAnalyzer, this);
                var problem:LessonProblem = new LessonProblem(
                   scriptAnalyzer.lessonDevFolder,
-                  "English line with incorrect ending",
+                  MainModel.getInstance().languageConfigInfo.getChunkLineStyleName_Native() + " line with incorrect ending",
                   LessonProblem.PROBLEM_TYPE__LINE__CHUNK_ENG__INCORRECT_LINE_ENDING,
                   LessonProblem.PROBLEM_LEVEL__WORRISOME,
                   fix,
@@ -56,7 +57,7 @@ package com.brightworks.lessoncreator.analyzers {
                fix = new Fix_Line_ChunkEng_ContainsRestrictedContent(scriptAnalyzer, this, contentRestriction);
                problem = new LessonProblem(
                   scriptAnalyzer.lessonDevFolder,
-                  "English line contains restricted content: " + contentRestriction.restrictedContent,
+                  MainModel.getInstance().languageConfigInfo.getChunkLineStyleName_Native() + " line contains restricted content: " + contentRestriction.restrictedContent,
                   LessonProblem.PROBLEM_TYPE__LINE__CHUNK_ENG__CONTAINS_RESTRICTED_CONTENT,
                   LessonProblem.PROBLEM_LEVEL__WORRISOME,
                   fix,

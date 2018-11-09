@@ -17,6 +17,7 @@ public class MainModel extends EventDispatcher implements IManagedSingleton {
 
     [Bindable]
     public var currentLessonLibrary:LessonLibrary;
+    public var languageConfigInfo:LanguageConfigInfo;
     [Bindable]
     public var lessonLibraryList:ArrayCollection;
     public var productionScriptFolderPath:String;
@@ -179,6 +180,7 @@ public class MainModel extends EventDispatcher implements IManagedSingleton {
         xmlConfigData_TargetLanguages = xml.targetLanguages[0]; // TODO - check for != 1 targetLanguages node
         initLessonLibraryInfoFromConfigData(xml.libraries[0]); // TODO - check for != 1 libraries node
         initVoiceTalentInfoFromConfigData(xml.voiceTalents[0]); // TODO - check for != 1 libraries node
+        languageConfigInfo = new LanguageConfigInfo();
     }
 
     private function initLessonLibraryInfoFromConfigData(librariesXml:XML):void {

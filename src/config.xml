@@ -2,15 +2,20 @@
   <!--
     Content Restrictions and Translations are in alphabetical order.
     Alphabetization rules/order: space char, then letters, then numbers
-
-  <lessonDevWorkspaces>
-    <lessonDevWorkspace>
-      <displayName>bbb</displayName>
-      <folderPath>/Users/douglasmccarroll/_langmentor/Lesson Development</folderPath>
-    </lessonDevWorkspace>
-  </lessonDevWorkspaces>
   -->
   <libraries>
+    <library>
+      <id>com.douglasmccarroll.deu-neue-horizonte</id>
+      <displayName>Neue Horizonte</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.langcollab.deu-new-horizons</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-new-horizons.langcollab.com</stagingFolderPath>
+    </library>
+    <library>
+      <id>com.douglasmccarroll.deu-pers</id>
+      <displayName>Douglas - German</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.langcollab.deu-mcca-doug</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-mcca-doug.langcollab.com</stagingFolderPath>
+    </library>
     <library>
       <id>com.languagecollaborative.cmn_eng</id>
       <displayName>Language Collaborative - Mandarin Chinese</displayName>
@@ -22,6 +27,18 @@
         <userName>langcollab_ftp</userName>
         <protocol>SFTP</protocol>
       </remoteFolder>
+    </library>
+    <library>
+      <id>com.languagecollaborative.deu-boga-nina</id>
+      <displayName>Nina Bogattke</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.langcollab.deu-boga-nina</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-boga-nina.langcollab.com</stagingFolderPath>
+    </library>
+    <library>
+      <id>com.languagecollaborative.deu_eng</id>
+      <displayName>Language Collaborative - German</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.langcollab.deu-lc</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-lc.langcollab.com</stagingFolderPath>
     </library>
     <library>
       <id>info.businesschinese</id>
@@ -71,30 +88,7 @@
         <protocol>SFTP</protocol>
       </remoteFolder>
     </library>
-	
-	
-    <library>
-      <id>com.languagecollaborative.deu_eng</id>
-      <displayName>Language Collaborative - German</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.langcollab.deu-lc</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-lc.langcollab.com</stagingFolderPath>
-    </library>
-    <library>
-      <id>com.douglasmccarroll.deu-neue-horizonte</id>
-      <displayName>Neue Horizonte</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.langcollab.deu-new-horizons</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-new-horizons.langcollab.com</stagingFolderPath>
-    </library>
-    <library>
-      <id>com.douglasmccarroll.deu-pers</id>
-      <displayName>Douglas - German</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.langcollab.deu-mcca-doug</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-mcca-doug.langcollab.com</stagingFolderPath>
-    </library>
   </libraries>
-  
-  
-  
   
   <productionScriptFolder>/Users/douglasmccarroll/_talent/Scripts</productionScriptFolder>  
   

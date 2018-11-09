@@ -9,6 +9,8 @@ import com.brightworks.lessoncreator.constants.Constants_LineType;
    import com.brightworks.lessoncreator.fixes.Fix_Line_ChunkCmn_IncorrectLineEnding;
    import com.brightworks.lessoncreator.fixes.Fix_Line_ChunkCmn_TooFewCmnCharacters;
    import com.brightworks.lessoncreator.fixes.Fix_Line_ChunkCmn_InappropriatePunctuation;
+   import com.brightworks.lessoncreator.fixes.Fix_Line_Chunk_ChunkTooLong;
+   import com.brightworks.lessoncreator.model.MainModel;
    import com.brightworks.lessoncreator.problems.LessonProblem;
    import com.brightworks.lessoncreator.util.contentrestriction.ContentRestriction;
    import com.brightworks.lessoncreator.util.contentrestriction.ContentRestrictionProcessor;
@@ -16,9 +18,7 @@ import com.brightworks.lessoncreator.constants.Constants_LineType;
    import com.brightworks.util.Utils_String;
 
    public class Analyzer_ScriptLine_Chunk_TargetLanguage extends Analyzer_ScriptLine_Chunk {
-      private static const LINE_CHAR_COUNT_HARD_LIMIT:int = 20;
-      private static const LINE_CHAR_COUNT_RECOMMENDED_LIMIT:int = 15;
-      private static const LINE_CHAR_COUNT_SOFT_LIMIT:int = 16;
+      private static const LINE_CHAR_COUNT_RECOMMENDED_LIMIT:int = 60;
 
       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
       //
@@ -47,88 +47,18 @@ import com.brightworks.lessoncreator.constants.Constants_LineType;
 
       override public function getProblems():Array {
          var problemList:Array = [];
-         var chineseCharCount:uint = Utils_String.getCommonChineseCharacterCount(lineText, true);
          var fix:Fix;
          var problem:LessonProblem;
-         var ratio:Number = chineseCharCount/lineText.length;
-         if ((ratio < .1) && (lineText.length > 3)) {
-            fix = new Fix_Line_ChunkCmn_TooFewCmnCharacters(scriptAnalyzer, this, lineText.length, chineseCharCount);
+         if (lineText.length > LINE_CHAR_COUNT_RECOMMENDED_LIMIT) {
+            fix = new Fix_Line_Chunk_ChunkTooLong(scriptAnalyzer, this, LINE_CHAR_COUNT_RECOMMENDED_LIMIT, lineText.length);
             problem = new LessonProblem(
                scriptAnalyzer.lessonDevFolder,
-               "Hanzi line with too few characters",
-               LessonProblem.PROBLEM_TYPE__LINE__CHUNK_CMN__TOO_FEW_CMN_CHARACTERS,
+               MainModel.getInstance().languageConfigInfo.getChunkLineStyleName_Target(scriptAnalyzer.targetLanguageISO639_3Code) + " is too long",
+               LessonProblem.PROBLEM_TYPE__LINE__CHUNK__CHUNK_TOO_LONG,
                LessonProblem.PROBLEM_LEVEL__WORRISOME,
                fix,
                this);
             problemList.push(problem);
-         }
-         if (!isExemptFromPunctuationChecking()) {
-            var inappropriatePunctuationString:String = Utils_String.extractCharsFromString(Constants_Misc.PUNCTUATION_LIST__NOT_USED_IN_HANZI, lineText);
-            if (inappropriatePunctuationString.length > 0) {
-               fix = new Fix_Line_ChunkCmn_InappropriatePunctuation(scriptAnalyzer, this, inappropriatePunctuationString);
-               problem = new LessonProblem(
-                  scriptAnalyzer.lessonDevFolder,
-                  "Hanzi line with inappropriate punctuation",
-                  LessonProblem.PROBLEM_TYPE__LINE__CHUNK_CMN__WESTERN_STYLE_PUNCTUATION,
-                  LessonProblem.PROBLEM_LEVEL__WORRISOME,
-                  fix,
-                  this);
-               problemList.push(problem);
-            } else {
-               // We don't have western-style punctuation, so now we check the
-               // hanzi-style punctuation.
-               if (lineText.indexOf("…") != lineText.indexOf("……")) {
-                  fix = new Fix_Line_ChunkCmn_IncorrectEllipsis(scriptAnalyzer, this);
-                  problem = new LessonProblem(
-                     scriptAnalyzer.lessonDevFolder,
-                     "Hanzi line with incorrect ellipsis",
-                     LessonProblem.PROBLEM_TYPE__LINE__CHUNK_CMN__INCORRECT_ELLIPSIS,
-                     LessonProblem.PROBLEM_LEVEL__WORRISOME,
-                     fix,
-                     this);
-                  problemList.push(problem);
-               } else {
-                  if (!Utils_String.doesStringEndWithString(lineText, ["。", "？", "�?", "……", "。）", '。"', "�?）", '�?"', "？）", '？"', "。�?", "？�?", "�?�?", "》", "：", "！"])) {
-                     fix = new Fix_Line_ChunkCmn_IncorrectLineEnding(scriptAnalyzer, this);
-                     problem = new LessonProblem(
-                        scriptAnalyzer.lessonDevFolder,
-                        "Chinese line with incorrect ending",
-                        LessonProblem.PROBLEM_TYPE__LINE__CHUNK_CMN__INCORRECT_LINE_ENDING,
-                        LessonProblem.PROBLEM_LEVEL__WORRISOME,
-                        fix,
-                        this);
-                     problemList.push(problem);
-                  }
-               }
-            }
-            var chineseNonPunctuationCharCount:int = Utils_String.getCommonChineseCharacterCount(lineText, false);
-            if (chineseNonPunctuationCharCount > LINE_CHAR_COUNT_SOFT_LIMIT) {
-               fix = new Fix_Line_ChunkCmn_ChunkTooLong(scriptAnalyzer, this, LINE_CHAR_COUNT_RECOMMENDED_LIMIT, chineseNonPunctuationCharCount);
-               problem = new LessonProblem(
-                  scriptAnalyzer.lessonDevFolder,
-                  "Hanzi line is too long",
-                  LessonProblem.PROBLEM_TYPE__LINE__CHUNK_CMN__CHUNK_TOO_LONG,
-                  LessonProblem.PROBLEM_LEVEL__WORRISOME,
-                  fix,
-                  this);
-               problemList.push(problem);
-            }
-         }
-         if (scriptAnalyzer.releaseType == Constant_ReleaseType.ALPHA_CAPITALIZED) {
-            var restrictedContentList:Array = ContentRestrictionProcessor.getListOfRestrictedContentContainedInString(lineText);
-            if (restrictedContentList.length > 0) {
-               for each (var contentRestriction:ContentRestriction in restrictedContentList) {
-                  fix = new Fix_Line_ChunkCmn_ContainsRestrictedContent(scriptAnalyzer, this, contentRestriction);
-                  problem = new LessonProblem(
-                     scriptAnalyzer.lessonDevFolder,
-                     "Hanzi line contains restricted content: " + contentRestriction.restrictedContent,
-                     LessonProblem.PROBLEM_TYPE__LINE__CHUNK_CMN__CONTAINS_RESTRICTED_CONTENT,
-                     LessonProblem.PROBLEM_LEVEL__WORRISOME,
-                     fix,
-                     this);
-                  problemList.push(problem);
-               }
-            }
          }
          return problemList;
       }
@@ -138,12 +68,6 @@ import com.brightworks.lessoncreator.constants.Constants_LineType;
          Log.fatal("Analyzer_ScriptLine_Chunk_TargetLanguage.isLineThisType(): Method not implemented");
          return false;
       }
-
-      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-      //
-      //          Private Methods
-      //
-      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
    }
 }

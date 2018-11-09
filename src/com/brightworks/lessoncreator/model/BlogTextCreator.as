@@ -5,6 +5,7 @@ import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk;
 import com.brightworks.util.Utils_String;
 
 public class BlogTextCreator {
+
    public function BlogTextCreator(lessonDevFolder:LessonDevFolder) {
       _lessonDevFolder = lessonDevFolder;
       _scriptAnalyzer = lessonDevFolder.scriptAnalyzer;
@@ -51,10 +52,12 @@ public class BlogTextCreator {
       var text_Chunk_TargetPhonetic:String = chunkAnalyzer.getLineText_TargetPhonetic();
       var text_Chunk_Note:String = chunkAnalyzer.getLineText_Note();
       text_Chunk_Native = Utils_String.replaceAll(text_Chunk_Native, "-0-", "");
-      text_Chunk_Target = Utils_String.replaceAll(text_Chunk_Target, "-0-", "");
-      text_Chunk_TargetPhonetic = Utils_String.replaceAll(text_Chunk_TargetPhonetic, "-0-", "");
       result += text_Chunk_Native + "\n";
-      result += text_Chunk_TargetPhonetic + "\n";
+      if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(_lessonDevFolder.targetLanguageISO639_3Code)) {
+         text_Chunk_TargetPhonetic = Utils_String.replaceAll(text_Chunk_TargetPhonetic, "-0-", "");
+         result += text_Chunk_TargetPhonetic + "\n";
+      }
+      text_Chunk_Target = Utils_String.replaceAll(text_Chunk_Target, "-0-", "");
       result += text_Chunk_Target + "\n";
       if (text_Chunk_Note)
             result += text_Chunk_Note + "\n";

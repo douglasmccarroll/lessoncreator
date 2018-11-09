@@ -34,7 +34,7 @@ import com.brightworks.util.Log;
 
         override public function getProblems():Array {
             var problemList:Array = [];
-            if (Utils_String.removeWhiteSpaceIncludingLineReturnsFromEndOfString(lineText) != "Target Language: cmn") {
+            if (lineText.indexOf("Target Language: ") != 0) {
                 var fix:Fix = new Fix_Line_HeaderEng_TargetLanguage_LinePrefix(scriptAnalyzer, this);
                 var problem:LessonProblem = new LessonProblem(
                         scriptAnalyzer.lessonDevFolder,
