@@ -152,6 +152,16 @@ public class LanguageConfigInfo {
       return result;
    }
 
+   public function isNativeLanguageSupported(iso639_3Code:String):Boolean {
+      var supportedLanguageList:Array = ["eng", "none"];
+      return (supportedLanguageList.indexOf(iso639_3Code) != -1);
+   }
+
+   public function isTargetLanguageSupported(iso639_3Code:String):Boolean {
+      var supportedLanguageList:Array = ["cmn", "deu", "esp"];
+      return (supportedLanguageList.indexOf(iso639_3Code) != -1);
+   }
+
    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
    //
    //     Private Methods
