@@ -188,27 +188,11 @@ public class LanguageConfigInfo {
 
    private function initLineAnalyzersIndex():void {
       _index_lineTypeAnalyzers = new Dictionary();
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__BLANK,                             _DEFAULT, Analyzer_ScriptLine_Blank);
       addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__CHUNK__NATIVE_LANGUAGE,            _DEFAULT, Analyzer_ScriptLine_Chunk_NativeLanguage);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__CHUNK__NOTE,                       _DEFAULT, Analyzer_ScriptLine_Chunk_Note);
       addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE,            _DEFAULT, Analyzer_ScriptLine_Chunk_TargetLanguage);
       addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE,            "cmn",    Analyzer_ScriptLine_Chunk_TargetLanguage_CMN);
       addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC,  _DEFAULT, Analyzer_ScriptLine_Chunk_TargetLanguage_Phonetic);
       addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC,  "cmn",    Analyzer_ScriptLine_Chunk_TargetLanguage_Phonetic_CMN);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__COMMENT,                           _DEFAULT, Analyzer_ScriptLine_Comment);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__AUTHOR_NAME,               _DEFAULT, Analyzer_ScriptLine_Header_AuthorName);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__LESSON_ID,                 _DEFAULT, Analyzer_ScriptLine_Header_LessonId);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__LESSON_NAME,               _DEFAULT, Analyzer_ScriptLine_Header_LessonName);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__LESSON_SORT_NAME,          _DEFAULT, Analyzer_ScriptLine_Header_LessonSortName);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__LEVEL,                     _DEFAULT, Analyzer_ScriptLine_Header_Level);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__LIBRARY_ID,                _DEFAULT, Analyzer_ScriptLine_Header_LibraryId);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__NATIVE_LANGUAGE,           _DEFAULT, Analyzer_ScriptLine_Header_NativeLanguage);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__PROVIDER_ID,               _DEFAULT, Analyzer_ScriptLine_Header_ProviderId);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__RELEASE_TYPE,              _DEFAULT, Analyzer_ScriptLine_Header_ReleaseType);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__ROLES,                     _DEFAULT, Analyzer_ScriptLine_Header_Roles);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__HEADER__TARGET_LANGUAGE,           _DEFAULT, Analyzer_ScriptLine_Header_TargetLanguage);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__ROLE_IDENTIFICATION,               _DEFAULT, Analyzer_ScriptLine_RoleIdentification);
-      addEntryToLineAnalyzersIndex(Constants_LineType.LINE_TYPE_ID__UNKNOWN,                           _DEFAULT, Analyzer_ScriptLine_Chunk_NativeLanguage);
    }
 }
 }

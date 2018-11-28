@@ -1,6 +1,7 @@
 package com.brightworks.lessoncreator.util.translationcheck {
    import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk;
-   import com.brightworks.lessoncreator.constants.Constants_LineType;
+import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk_Default;
+import com.brightworks.lessoncreator.constants.Constants_LineType;
    import com.brightworks.lessoncreator.model.MainModel;
    import com.brightworks.util.Log;
    import com.brightworks.util.Utils_DataConversionComparison;
@@ -19,7 +20,7 @@ package com.brightworks.lessoncreator.util.translationcheck {
       public function TranslationCheckProcessor() {
       }
 
-      public static function getListOfFailedTranslationChecks(chunkAnalyzer:Analyzer_ScriptChunk):Array {
+      public static function getListOfFailedTranslationChecks(chunkAnalyzer:Analyzer_ScriptChunk_Default):Array {
          initIfNeeded();
          var result:Array = [];
          var targetLanguageSubDictionary:Dictionary = _translationCheckData[chunkAnalyzer.targetLanguageIso639_3Code];

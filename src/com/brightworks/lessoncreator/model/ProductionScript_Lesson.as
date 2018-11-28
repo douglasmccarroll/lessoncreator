@@ -1,7 +1,10 @@
 package com.brightworks.lessoncreator.model {
    import com.brightworks.lessoncreator.analyzers.Analyzer_Script;
    import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk;
-   import com.brightworks.lessoncreator.constants.Constants_Language;
+import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk_Default;
+import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk_Default;
+import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk_Explanatory;
+import com.brightworks.lessoncreator.constants.Constants_Language;
 import com.brightworks.lessoncreator.constants.Constants_LessonLevel;
 import com.brightworks.lessoncreator.constants.Constants_ProductionScript;
    import com.brightworks.lessoncreator.model.ProductionScript;
@@ -128,25 +131,47 @@ import com.brightworks.lessoncreator.constants.Constants_ProductionScript;
             return 0;
          var result:uint;
          var lineText:String;
-         switch (_languageType) {
-            case Constants_ProductionScript.LANGUAGE_TYPE__NATIVE:
-               lineText = chunkAnalyzer.getLineText_Native();
+         switch (chunkAnalyzer.chunkType) {
+            case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {
+               switch (_languageType) {
+                  case Constants_ProductionScript.LANGUAGE_TYPE__NATIVE:
+                     lineText = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Native();
+                     break;
+                  case Constants_ProductionScript.LANGUAGE_TYPE__TARGET:
+                     lineText = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Target();
+                     break;
+                  default:
+                     Log.error("ProductionScript_Lesson.computePaidForUnitCount(): No match for _languageType of: " + _languageType);
+               }
+               switch (getAudioRecordingPaidForUnit()) {
+                  case Constants_ProductionScript.AUDIO_RECORDING__PAID_FOR_UNIT__CHARACTER:
+                     result = lineText.length;
+                     break;
+                  case Constants_ProductionScript.AUDIO_RECORDING__PAID_FOR_UNIT__WORD:
+                     result = Utils_String.getWordCountForString(lineText);
+                     break;
+                  default:
+                     Log.error("ProductionScript_Lesson.computePaidForUnitCount(): No match for paidForUnit of: " + getAudioRecordingPaidForUnit());
+               }
                break;
-            case Constants_ProductionScript.LANGUAGE_TYPE__TARGET:
-               lineText = chunkAnalyzer.getLineText_Target();
+            }
+            case Analyzer_ScriptChunk.CHUNK_TYPE__EXPLANATORY: {
+               // We assume that explanations will be in the user's native language
+               switch (_languageType) {
+                  case Constants_ProductionScript.LANGUAGE_TYPE__NATIVE:
+                     lineText = Analyzer_ScriptChunk_Explanatory(chunkAnalyzer).getLineText_Audio();
+                     result = Utils_String.getWordCountForString(lineText);
+                     break;
+                  case Constants_ProductionScript.LANGUAGE_TYPE__TARGET:
+                     result = 0;
+                     break;
+                  default:
+                     Log.error("ProductionScript_Lesson.computePaidForUnitCount(): No match for _languageType of: " + _languageType);
+               }
                break;
+            }
             default:
-               Log.error("ProductionScript_Lesson.computePaidForUnitCount(): No match for _languageType of: " + _languageType);
-         }
-         switch (getAudioRecordingPaidForUnit()) {
-            case Constants_ProductionScript.AUDIO_RECORDING__PAID_FOR_UNIT__CHARACTER:
-               result = lineText.length;
-               break;
-            case Constants_ProductionScript.AUDIO_RECORDING__PAID_FOR_UNIT__WORD:
-               result = Utils_String.getWordCountForString(lineText);
-               break;
-            default:
-               Log.error("ProductionScript_Lesson.computePaidForUnitCount(): No match for paidForUnit of: " + getAudioRecordingPaidForUnit());
+               Log.fatal("ProductionScript_Lesson.computeAudioRecordingPaidForUnitCount_Chunk() - No case for chunk type of: " + chunkAnalyzer.chunkType);
          }
          return result;
       }
@@ -216,80 +241,110 @@ import com.brightworks.lessoncreator.constants.Constants_ProductionScript;
 
       private function createScriptText_Chunk(chunkAnalyzer:Analyzer_ScriptChunk):String {
          var result:String = "";
-         var text_Chunk_Native:String = chunkAnalyzer.getLineText_Native();
-         var text_Chunk_Target:String = chunkAnalyzer.getLineText_Target();
-         var text_Chunk_TargetPhonetic:String = chunkAnalyzer.getLineText_TargetPhonetic();
          var text_ChunkNumber:String = String(chunkAnalyzer.chunkNumber);
-         text_Chunk_Native = Utils_String.replaceAll(text_Chunk_Native, "-0-", "");
-         text_Chunk_Target = Utils_String.replaceAll(text_Chunk_Target, "-0-", "");
-         text_Chunk_TargetPhonetic = Utils_String.replaceAll(text_Chunk_TargetPhonetic, "-0-", "");
-         switch (_scriptType) {
-            case Constants_ProductionScript.SCRIPT_TYPE__AUDIO_CHECKING_AND_EDITING:
-               if (isChunkRoleIncludedRole(chunkAnalyzer)) {
-                  result += text_ChunkNumber + "\n";
-                  result += text_Chunk_Native + "\n";
-                  result += text_Chunk_TargetPhonetic + "\n";
-                  result += text_Chunk_Target + "\n";
-                  result += "\n";
-               }
-               break;
-            /*case Constants_ProductionScript.SCRIPT_TYPE__AUDIO_EDITING:
-               result += text_ChunkNumber + "\n";
-               if (isChunkRoleIncludedRole(chunkAnalyzer))
-                  text_Chunk_Native = wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_Native);
-               result += text_Chunk_Native + "\n";
-               if (text_Chunk_TargetPhonetic) {
-                  if (isChunkRoleIncludedRole(chunkAnalyzer))
-                     text_Chunk_TargetPhonetic = wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_TargetPhonetic);
-                  result += text_Chunk_TargetPhonetic + "\n";
-               }
-               if (isChunkRoleIncludedRole(chunkAnalyzer))
-                  text_Chunk_Target = wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_Target);
-               result += text_Chunk_Target + "\n";
-               result += "\n";
-               break;*/
-            case Constants_ProductionScript.SCRIPT_TYPE__AUDIO_RECORDING:
-               switch (_languageType) {
-                  case Constants_ProductionScript.LANGUAGE_TYPE__NATIVE:
-                     if (!isChunkRoleIncludedRole(chunkAnalyzer))
-                        text_Chunk_Native = wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_Native);
-                     result += text_Chunk_Native + "\n";
+         switch (chunkAnalyzer.chunkType) {
+            case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {
+               var chunkAnalyzer_Default:Analyzer_ScriptChunk_Default = Analyzer_ScriptChunk_Default(chunkAnalyzer);
+               var text_Chunk_Native:String = chunkAnalyzer_Default.getLineText_Native();
+               var text_Chunk_Target:String = chunkAnalyzer_Default.getLineText_Target();
+               var text_Chunk_TargetPhonetic:String = chunkAnalyzer_Default.getLineText_TargetPhonetic();
+               text_Chunk_Native = Utils_String.replaceAll(text_Chunk_Native, "-0-", "");
+               text_Chunk_Target = Utils_String.replaceAll(text_Chunk_Target, "-0-", "");
+               text_Chunk_TargetPhonetic = Utils_String.replaceAll(text_Chunk_TargetPhonetic, "-0-", "");
+               switch (_scriptType) {
+                  case Constants_ProductionScript.SCRIPT_TYPE__AUDIO_CHECKING_AND_EDITING:
+                     if (isChunkRoleIncludedRole(chunkAnalyzer_Default)) {
+                        result += text_ChunkNumber + "\n";
+                        result += text_Chunk_Native + "\n";
+                        result += text_Chunk_TargetPhonetic + "\n";
+                        result += text_Chunk_Target + "\n";
+                        result += "\n";
+                     }
                      break;
-                  case Constants_ProductionScript.LANGUAGE_TYPE__TARGET:
-                     if (text_Chunk_TargetPhonetic)
-                        result += wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_TargetPhonetic) + "\n";
-                     if (!isChunkRoleIncludedRole(chunkAnalyzer))
-                        text_Chunk_Target = wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_Target);
-                     result += text_Chunk_Target + "\n";
+                  case Constants_ProductionScript.SCRIPT_TYPE__AUDIO_RECORDING:
+                     switch (_languageType) {
+                        case Constants_ProductionScript.LANGUAGE_TYPE__NATIVE:
+                           if (!isChunkRoleIncludedRole(chunkAnalyzer_Default))
+                              text_Chunk_Native = wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_Native);
+                           result += text_Chunk_Native + "\n";
+                           break;
+                        case Constants_ProductionScript.LANGUAGE_TYPE__TARGET:
+                           if (text_Chunk_TargetPhonetic)
+                              result += wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_TargetPhonetic) + "\n";
+                           if (!isChunkRoleIncludedRole(chunkAnalyzer_Default))
+                              text_Chunk_Target = wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_Target);
+                           result += text_Chunk_Target + "\n";
+                           break;
+                        default:
+                           Log.error("ProductionScript_Lesson.createScriptText_Chunk(): In audio recording script, _languageType is neither native nor target");
+                     }
+                     if (isChunkRoleIncludedRole(chunkAnalyzer_Default)) {
+                        var iso639_3Code:String = ProductionScript.getAudioRecordingISO639_3LanguageCode(_languageType, _scriptAnalyzer);
+                        var noteList:Array = chunkAnalyzer_Default.getAudioRecordingNotesForLanguage(iso639_3Code);
+                        for each (var note:String in noteList) {
+                           result += wrapTextInLineTypeIndicators_NonRecorded("NOTE: " + note) + "\n";
+                        }
+                     }
+                     result += "\n";
+                     break;
+                  case Constants_ProductionScript.SCRIPT_TYPE__FINAL_ALPHA_CHECK:
+                     result += text_ChunkNumber + "\n";
+                     result += text_Chunk_Native + "\n";
+                     noteList =  chunkAnalyzer_Default.getAudioRecordingNotesForLanguage_Native();
+                     for each (note in noteList) {
+                        result += "NOTE: " + note + "\n";
+                     }
+                     result += text_Chunk_TargetPhonetic + "\n";
+                     result += text_Chunk_Target + "\n\n";
+                     noteList =  chunkAnalyzer_Default.getAudioRecordingNotesForLanguage_Target();
+                     for each (note in noteList) {
+                        result += "NOTE: " + note + "\n";
+                     }
                      break;
                   default:
-                     Log.error("ProductionScript_Lesson.createScriptText_Chunk(): In audio recording script, _languageType is neither native nor target");
-               }
-               if (isChunkRoleIncludedRole(chunkAnalyzer)) {
-                  var iso639_3Code:String = ProductionScript.getAudioRecordingISO639_3LanguageCode(_languageType, _scriptAnalyzer);
-                  var noteList:Array = chunkAnalyzer.getAudioRecordingNotesForLanguage(iso639_3Code);
-                  for each (var note:String in noteList) {
-                     result += wrapTextInLineTypeIndicators_NonRecorded("NOTE: " + note) + "\n";
-                  }
-               }
-               result += "\n";
-               break;
-            case Constants_ProductionScript.SCRIPT_TYPE__FINAL_ALPHA_CHECK:
-               result += text_ChunkNumber + "\n";
-               result += text_Chunk_Native + "\n";
-               noteList =  chunkAnalyzer.getAudioRecordingNotesForLanguage_Native();
-               for each (note in noteList) {
-                  result += "NOTE: " + note + "\n";
-               }
-               result += text_Chunk_TargetPhonetic + "\n";
-               result += text_Chunk_Target + "\n\n";
-               noteList =  chunkAnalyzer.getAudioRecordingNotesForLanguage_Target();
-               for each (note in noteList) {
-                  result += "NOTE: " + note + "\n";
+                     Log.fatal("ProductionScript_Lesson.createScriptText_Chunk(): No case for _scriptType of: " + _scriptType);
                }
                break;
+            }
+            case Analyzer_ScriptChunk.CHUNK_TYPE__EXPLANATORY: {
+               var chunkAnalyzer_Explanatory:Analyzer_ScriptChunk_Explanatory = Analyzer_ScriptChunk_Explanatory(chunkAnalyzer);
+               var text_Chunk_Audio:String = chunkAnalyzer_Explanatory.getLineText_Audio();
+               var text_Chunk_Display:String = chunkAnalyzer_Explanatory.getLineText_Display();
+               switch (_scriptType) {
+                  case Constants_ProductionScript.SCRIPT_TYPE__AUDIO_CHECKING_AND_EDITING:
+                     if (isChunkRoleIncludedRole(chunkAnalyzer_Explanatory)) {
+                        result += text_ChunkNumber + "\n";
+                        result += text_Chunk_Display + "\n";
+                        result += text_Chunk_Audio + "\n";
+                        result += "\n";
+                     }
+                     break;
+                  case Constants_ProductionScript.SCRIPT_TYPE__AUDIO_RECORDING:
+                     switch (_languageType) {
+                        case Constants_ProductionScript.LANGUAGE_TYPE__NATIVE:
+                           if (!isChunkRoleIncludedRole(chunkAnalyzer_Explanatory))
+                              text_Chunk_Audio = wrapTextInLineTypeIndicators_NonRecorded(text_Chunk_Audio);
+                           result += text_Chunk_Audio + "\n";
+                           break;
+                        case Constants_ProductionScript.LANGUAGE_TYPE__TARGET:
+                           // We don't record any explanatory text in the target language
+                           break;
+                        default:
+                           Log.error("ProductionScript_Lesson.createScriptText_Chunk(): In audio recording script, _languageType is neither native nor target");
+                     }
+                     result += "\n";
+                     break;
+                  case Constants_ProductionScript.SCRIPT_TYPE__FINAL_ALPHA_CHECK:
+                     result += text_ChunkNumber + "\n";
+                     result += text_Chunk_Audio + "\n";
+                     break;
+                  default:
+                     Log.fatal("ProductionScript_Lesson.createScriptText_Chunk(): No case for _scriptType of: " + _scriptType);
+               }
+               break;
+            }
             default:
-               Log.error("ProductionScript_Lesson.createScriptText_Chunk(): No case for _scriptType of: " + _scriptType);
+               Log.fatal("ProductionScript_Lesson.createScriptText_Chunk() - No case for chunk type of: " + chunkAnalyzer.chunkType);
          }
          return result;
       }

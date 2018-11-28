@@ -3,6 +3,7 @@ package com.brightworks.lessoncreator.analyzers {
     import com.brightworks.util.Utils_String;
 
     public class Analyzer_ScriptLine_Blank extends Analyzer_ScriptLine {
+
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
         //
         //          Getters & Setters

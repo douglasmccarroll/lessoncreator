@@ -1,5 +1,6 @@
 package com.brightworks.lessoncreator.util.translationcheck {
 import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk;
+import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk_Default;
 import com.brightworks.lessoncreator.constants.Constants_LineType;
 import com.brightworks.util.Log;
 import com.brightworks.util.Utils_String;
@@ -25,7 +26,7 @@ import flash.utils.Dictionary;
 
       private static var _index_translationDirection_to_engDescription:Dictionary;
 
-      private var _chunkAnalyzer:Analyzer_ScriptChunk;
+      private var _chunkAnalyzer:Analyzer_ScriptChunk_Default;
       private var _translationCheckDefinition:TranslationCheckDefinition;
 
       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -49,7 +50,7 @@ import flash.utils.Dictionary;
       //
       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
-      public function TranslationCheck(translationCheckDefinition:TranslationCheckDefinition, chunkAnalyzer:Analyzer_ScriptChunk) {
+      public function TranslationCheck(translationCheckDefinition:TranslationCheckDefinition, chunkAnalyzer:Analyzer_ScriptChunk_Default) {
          _chunkAnalyzer = chunkAnalyzer;
          _translationCheckDefinition = translationCheckDefinition;
          initIfNeeded();

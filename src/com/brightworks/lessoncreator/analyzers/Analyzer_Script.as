@@ -1,14 +1,18 @@
 package com.brightworks.lessoncreator.analyzers {
 import com.brightworks.constant.Constant_ReleaseType;
+import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk_Default;
+import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk_Default;
 import com.brightworks.lessoncreator.constants.Constants_LineType;
 import com.brightworks.lessoncreator.constants.Constants_Misc;
 import com.brightworks.lessoncreator.fixes.Fix;
 import com.brightworks.lessoncreator.fixes.Fix_Script_BlankScript;
+import com.brightworks.lessoncreator.fixes.Fix_Script_ChunkLinesWithMoreThanOneChunkTypeSpecifyingCommentLine;
 import com.brightworks.lessoncreator.fixes.Fix_Script_ChunkLinesWithoutRole;
 import com.brightworks.lessoncreator.fixes.Fix_Script_DefectiveHeader;
 import com.brightworks.lessoncreator.fixes.Fix_Script_IndeterminateLineType;
 import com.brightworks.lessoncreator.fixes.Fix_Script_IndeterminateSentenceEnd_PhoneticTargetText;
 import com.brightworks.lessoncreator.fixes.Fix_Script_NoBlankLines;
+import com.brightworks.lessoncreator.model.LanguageConfigInfo;
 import com.brightworks.lessoncreator.model.LessonDevFolder;
 import com.brightworks.lessoncreator.model.MainModel;
 import com.brightworks.lessoncreator.problems.LessonProblem;
@@ -204,6 +208,25 @@ public class Analyzer_Script extends Analyzer {
       return MainModel.getInstance().languageConfigInfo.getChunkLineStyleName_TargetRomanized(targetLanguageISO639_3Code, capitalize);
    }
 
+   public function getChunkType(chunkAndCommentLineAnalyzerList:Array):String {
+      var lineTypeList:Array = [];  // We should only find 0 or 1 chunk-type identifying comments
+      for each (var lineAnalyzer:Analyzer_ScriptLine in chunkAndCommentLineAnalyzerList) {
+         if (lineAnalyzer is Analyzer_ScriptLine_Comment) {
+            if (Analyzer_ScriptLine_Comment(lineAnalyzer).isExplanatoryChunkComment()) {
+               lineTypeList.push(Analyzer_ScriptChunk.CHUNK_TYPE__EXPLANATORY);
+            }
+         }
+      }
+      if (lineTypeList.length > 1) {
+         return Analyzer_ScriptChunk.CHUNK_TYPE__UNKNOWN;
+      }
+      if (lineTypeList.length == 1) {
+         return lineTypeList[0];
+      } else {
+         return Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT;
+      }
+   }
+
    public function init(scriptText:String):void {
       // If we can assume that we have a blank line at the end of our script it
       // simplifies our code. See analyzeChunks_CreateChunkAnalyzerList in
@@ -261,6 +284,19 @@ public class Analyzer_Script extends Analyzer {
 
    private function addProblemToProblemList(problem:LessonProblem):void {
       _problemList.push(problem);
+   }
+
+   private function addProblemToProblemList_ChunkLinesWithMoreThanOneChunkTypeSpecifyingCommentLine(lineAnalyzerList:Array):void {
+      var lineNumber_FirstLine:uint = Analyzer_ScriptLine(lineAnalyzerList[0]).lineNumber;
+      var fix:Fix = new Fix_Script_ChunkLinesWithMoreThanOneChunkTypeSpecifyingCommentLine(this, lineAnalyzerList, lineNumber_FirstLine);
+      var problem:LessonProblem = new LessonProblem(
+            lessonDevFolder,
+            "Multiple comment lines in chunk which specify chunk type",
+            LessonProblem.PROBLEM_TYPE__SCRIPT__MULTIPLE_COMMENT_LINES_IN_CHUNK_WHICH_SPECIFY_CHUNK_TYPE,
+            LessonProblem.PROBLEM_LEVEL__IMPEDIMENT,
+            fix,
+            this);
+      addProblemToProblemList(problem);
    }
 
    private function addProblemToProblemList_ChunkLinesWithNoRole(lineAnalyzerList:Array):void {
@@ -343,26 +379,33 @@ public class Analyzer_Script extends Analyzer {
          var analyzerCount:int = chunkListForRole.length;
          for (var i:int = 0; i < (analyzerCount - 1); i++) {
             var firstAnalyzerInPair:Analyzer_ScriptChunk = chunkListForRole[i];
-            if (firstAnalyzerInPair.isChunkExemptFromPunctuationChecking())
-               continue;
-            var secondAnalyzerInPair:Analyzer_ScriptChunk = chunkListForRole[i + 1];
-            if (secondAnalyzerInPair.isChunkExemptFromPunctuationChecking())
-               continue;
-            if (secondAnalyzerInPair.isLinePrecededByIgnoreProblemsCommentLine(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC))
-               continue;
-            if (firstAnalyzerInPair.isPinyinLineFinalOrOnlyChunkInSentence()) {
-               if (!secondAnalyzerInPair.isPinyinLineFirstOrOnlyChunkInSentence()) {
-                  var firstLineNumber:uint = firstAnalyzerInPair.getLineNumber(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC);
-                  var secondLineNumber:uint = secondAnalyzerInPair.getLineNumber(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC);
-                  var fix:Fix = new Fix_Script_IndeterminateSentenceEnd_PhoneticTargetText(this, firstLineNumber, secondLineNumber);
-                  var problem:LessonProblem = new LessonProblem(
-                        lessonDevFolder,
-                        getChunkLineStyleName_TargetRomanized(true) + " punctuation problem",
-                        LessonProblem.PROBLEM_TYPE__SCRIPT__INDETERMINATE_SENTENCE_END__ROMANIZED_TARGET_TEXT,
-                        LessonProblem.PROBLEM_LEVEL__WORRISOME,
-                        fix);
-                  addProblemToProblemList(problem);
+            switch (firstAnalyzerInPair.chunkType) {
+               case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {
+                  if (firstAnalyzerInPair.isChunkExemptFromPunctuationChecking())
+                     continue;
+                  var secondAnalyzerInPair:Analyzer_ScriptChunk = chunkListForRole[i + 1];
+                  if (secondAnalyzerInPair.isChunkExemptFromPunctuationChecking())
+                     continue;
+                  if (secondAnalyzerInPair.isLinePrecededByIgnoreProblemsCommentLine(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC))
+                     continue;
+                  if (Analyzer_ScriptChunk_Default(firstAnalyzerInPair).isPinyinLineFinalOrOnlyChunkInSentence()) {
+                     if (!Analyzer_ScriptChunk_Default(secondAnalyzerInPair).isPinyinLineFirstOrOnlyChunkInSentence()) {
+                        var firstLineNumber:uint = firstAnalyzerInPair.getLineNumber(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC);
+                        var secondLineNumber:uint = secondAnalyzerInPair.getLineNumber(Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC);
+                        var fix:Fix = new Fix_Script_IndeterminateSentenceEnd_PhoneticTargetText(this, firstLineNumber, secondLineNumber);
+                        var problem:LessonProblem = new LessonProblem(
+                              lessonDevFolder,
+                              getChunkLineStyleName_TargetRomanized(true) + " punctuation problem",
+                              LessonProblem.PROBLEM_TYPE__SCRIPT__INDETERMINATE_SENTENCE_END__ROMANIZED_TARGET_TEXT,
+                              LessonProblem.PROBLEM_LEVEL__WORRISOME,
+                              fix);
+                        addProblemToProblemList(problem);
+                     }
+                  }
+                  break;
                }
+               default:
+                  continue;
             }
          }
       }
@@ -379,26 +422,47 @@ public class Analyzer_Script extends Analyzer {
    private function analyzeChunks_CreateChunkAnalyzerLists():void {
       _chunkAnalyzerList = [];
       _chunkAnalyzersSortedByRole = new Dictionary();
-      var currentChunkAndCommentLineAnalyzerList:Array = [];
+      var tempChunkAndCommentLineAnalyzerList:Array = [];
       var newChunkAnalyzer:Analyzer_ScriptChunk;
       var currChunkNumber:int = 0;
       var currRoleName:String;
       for each (var lineAnalyzer:Analyzer_ScriptLine in _lineAnalyzerList) {
          if ((lineAnalyzer.isChunkLine) || (lineAnalyzer is Analyzer_ScriptLine_Comment)) {
-            currentChunkAndCommentLineAnalyzerList.push(lineAnalyzer);
+            tempChunkAndCommentLineAnalyzerList.push(lineAnalyzer);
          } else {
             // Not a chunk line - do we have a chunk's data to process?
-            var chunkLineAnalyzerCount:uint = computeNumberOfChunkLineAnalyzersInList(currentChunkAndCommentLineAnalyzerList);
+            var chunkLineAnalyzerCount:uint = computeNumberOfChunkLineAnalyzersInList(tempChunkAndCommentLineAnalyzerList);
             if (chunkLineAnalyzerCount == 0) {
                // Do nothing - no data to process
             } else if ((chunkLineAnalyzerCount >= getAllowedNonCommentChunkLineCount_Minimum()) && (chunkLineAnalyzerCount <= getAllowedNonCommentChunkLineCount_Maximum())) {
                // Yes, we have data to process. Create an Analyzer_ScriptChunk instance.
                currChunkNumber++;
-               newChunkAnalyzer = new Analyzer_ScriptChunk(this);
+               var isInstanceCreated:Boolean;
+               switch (getChunkType(tempChunkAndCommentLineAnalyzerList)) {
+                  case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {
+                     newChunkAnalyzer = new Analyzer_ScriptChunk_Default(this);
+                     Analyzer_ScriptChunk_Default(newChunkAnalyzer).nativeLanguageIso639_3Code = nativeLanguageISO639_3Code;
+                     Analyzer_ScriptChunk_Default(newChunkAnalyzer).targetLanguageIso639_3Code = targetLanguageISO639_3Code;
+                     isInstanceCreated = true;
+                     break;
+                  }
+                  case Analyzer_ScriptChunk.CHUNK_TYPE__EXPLANATORY: {
+                     newChunkAnalyzer = new Analyzer_ScriptChunk_Explanatory(this);
+                     isInstanceCreated = true;
+                     break;
+                  }
+                  case Analyzer_ScriptChunk.CHUNK_TYPE__UNKNOWN: {
+                     addProblemToProblemList_ChunkLinesWithMoreThanOneChunkTypeSpecifyingCommentLine(tempChunkAndCommentLineAnalyzerList);
+                     break;
+                  }
+                  default: {
+                     Log.error("Analyzer_Script.analyzeChunks_CreateChunkAnalyzerLists() - No case for chunk type of: " + getChunkType(tempChunkAndCommentLineAnalyzerList));
+                  }
+               }
+               if (!isInstanceCreated)
+                     continue;
                newChunkAnalyzer.chunkNumber = currChunkNumber;
                newChunkAnalyzer.lineCode = Utils_String.padBeginning(String(currChunkNumber), 2, "0");
-               newChunkAnalyzer.nativeLanguageIso639_3Code = nativeLanguageISO639_3Code;
-               newChunkAnalyzer.targetLanguageIso639_3Code = targetLanguageISO639_3Code;
                if (currRoleName) {
                   newChunkAnalyzer.roleName = currRoleName;
                } else {
@@ -408,19 +472,19 @@ public class Analyzer_Script extends Analyzer {
                      Log.fatal("Analyzer_Script.analyzeChunks_CreateChunkAnalyzerList():  Chunk line occurs before role any role identification line - this should have been caught in 'analysis' stage and should have prevented 'create scripts' stage");
                   }
                }
-               for each (var subLoopLineAnalyzer:Analyzer_ScriptLine in currentChunkAndCommentLineAnalyzerList) {
+               for each (var subLoopLineAnalyzer:Analyzer_ScriptLine in tempChunkAndCommentLineAnalyzerList) {
                   if (subLoopLineAnalyzer.isChunkLine) {
                      newChunkAnalyzer.addAnalyzer_ScriptLine(subLoopLineAnalyzer);
                      Analyzer_ScriptLine_Chunk(subLoopLineAnalyzer).setAnalyzer_ScriptChunk(newChunkAnalyzer);
                   }
                }
-               newChunkAnalyzer.lineAnalyzerListIncludingCommentLines = currentChunkAndCommentLineAnalyzerList;
+               newChunkAnalyzer.lineAnalyzerListIncludingCommentLines = tempChunkAndCommentLineAnalyzerList;
                _chunkAnalyzerList.push(newChunkAnalyzer);
                addChunkAnalyzerToChunkAnalyzersSortedByRole(newChunkAnalyzer);
                // Reset list, ready to gather data for a next chunk
-               currentChunkAndCommentLineAnalyzerList = [];
+               tempChunkAndCommentLineAnalyzerList = [];
             } else {
-               Log.fatal("Analyzer_Script.analyzeChunks_CreateChunkAnalyzerList(): " + currentChunkAndCommentLineAnalyzerList.length + "- should always be 3 or 4");
+               Log.fatal("Analyzer_Script.analyzeChunks_CreateChunkAnalyzerList(): " + tempChunkAndCommentLineAnalyzerList.length + "- should always be 3 or 4");
             }
             if (lineAnalyzer is Analyzer_ScriptLine_RoleIdentification) {
                currRoleName = Analyzer_ScriptLine_RoleIdentification(lineAnalyzer).roleName;
@@ -469,13 +533,45 @@ public class Analyzer_Script extends Analyzer {
          addProblemToProblemList_DefectiveHeader();
          return;
       }
+      var index_LineTypeId_to_AnalyzerClass:Dictionary = new Dictionary();
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__BLANK                            ] = Analyzer_ScriptLine_Blank;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__CHUNK__EXPLANATORY__AUDIO_TEXT   ] = Analyzer_ScriptLine_Chunk_Explanatory_AudioText;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__CHUNK__EXPLANATORY__DISPLAY_TEXT ] = Analyzer_ScriptLine_Chunk_Explanatory_DisplayText;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__CHUNK__NOTE                      ] = Analyzer_ScriptLine_Chunk_Note;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__COMMENT                          ] = Analyzer_ScriptLine_Comment;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__AUTHOR_NAME              ] = Analyzer_ScriptLine_Header_AuthorName;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__LESSON_ID                ] = Analyzer_ScriptLine_Header_LessonId;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__LESSON_NAME              ] = Analyzer_ScriptLine_Header_LessonName;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__LESSON_SORT_NAME         ] = Analyzer_ScriptLine_Header_LessonSortName;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__LEVEL                    ] = Analyzer_ScriptLine_Header_Level;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__LIBRARY_ID               ] = Analyzer_ScriptLine_Header_LibraryId;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__NATIVE_LANGUAGE          ] = Analyzer_ScriptLine_Header_NativeLanguage;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__PROVIDER_ID              ] = Analyzer_ScriptLine_Header_ProviderId;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__RELEASE_TYPE             ] = Analyzer_ScriptLine_Header_ReleaseType;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__ROLES                    ] = Analyzer_ScriptLine_Header_Roles;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__HEADER__TARGET_LANGUAGE          ] = Analyzer_ScriptLine_Header_TargetLanguage;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__ROLE_IDENTIFICATION              ] = Analyzer_ScriptLine_RoleIdentification;
+      index_LineTypeId_to_AnalyzerClass[Constants_LineType.LINE_TYPE_ID__UNKNOWN                          ] = Analyzer_ScriptLine_Chunk_NativeLanguage;
       var lineNumber:int = 0;
       var lineTypeId:String;
       var lineAnalyzer:Analyzer_ScriptLine;
       for each (var lineString:String in _lineStringList) {
          lineNumber++;
-         lineTypeId = determineLineTypeId(lineNumber)
-         lineAnalyzer = MainModel.getInstance().languageConfigInfo.getLineAnalyzerInstanceForLineType(lineTypeId, targetLanguageISO639_3Code, this);
+         lineTypeId = determineLineTypeId(lineNumber);
+         switch (lineTypeId) {
+            case Constants_LineType.LINE_TYPE_ID__CHUNK__NATIVE_LANGUAGE:
+            case Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE:
+            case Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC:
+               lineAnalyzer = MainModel.getInstance().languageConfigInfo.getLineAnalyzerInstanceForLineType(lineTypeId, targetLanguageISO639_3Code, this);
+               break;
+            default:
+               var clazz:Class = index_LineTypeId_to_AnalyzerClass[lineTypeId];
+               lineAnalyzer = new clazz(this);
+         }
+         if (!(lineAnalyzer is Analyzer_ScriptLine)) {
+            Log.fatal("Analyzer_Script.analyzeLines_CreateLineAnalyzerList() - No line analyzer created");
+            _lineAnalyzerList.push(lineAnalyzer);
+         }
          lineAnalyzer.lineNumber = lineNumber;
          lineAnalyzer.lineTypeId = lineTypeId;
          lineAnalyzer.lineText = lineString;
@@ -529,23 +625,41 @@ public class Analyzer_Script extends Analyzer {
          var chunkNumberString:String = Utils_DataConversionComparison.convertNumberToString(chunkAnalyzer.chunkNumber, 0, true, 2, "0");
          var fileNameRootElement:XML = <fileNameRoot>{chunkNumberString}</fileNameRoot>;
          chunkElement.appendChild(fileNameRootElement);
-         var nativeText:String = chunkAnalyzer.getLineText_Native();
-         var textNativeLanguageElement:XML = <textNativeLanguage>{nativeText}</textNativeLanguage>;
-         chunkElement.appendChild(textNativeLanguageElement);
-         // TODO - so that we can display hanzi etc - rather than either/or, include both target language text and phonetic target language text
-         if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(targetLanguageISO639_3Code)) {
-            var targetPhoneticText:String = chunkAnalyzer.getLineText_TargetPhonetic();
-            targetPhoneticText = doesTextContainEmptyLineIndicator(targetPhoneticText) ? "" : targetPhoneticText;
-            // TODO - next line is cmn-specific
-            targetPhoneticText = PinyinProcessor.convertNumberToneIndicatorsToToneMarks(targetPhoneticText);
-            var textTargetLanguagePhoneticElement:XML =
-                  <{defaultTextDisplayType}>{targetPhoneticText}</{defaultTextDisplayType}>;
-            chunkElement.appendChild(textTargetLanguagePhoneticElement);
-         } else {
-            var targetText:String = chunkAnalyzer.getLineText_Target();
-            targetText = doesTextContainEmptyLineIndicator(targetText) ? "" : targetText;
-            var textTargetLanguageElement:XML = <{defaultTextDisplayType}>{targetText}</{defaultTextDisplayType}>;
-            chunkElement.appendChild(textTargetLanguageElement);
+         switch (chunkAnalyzer.chunkType) {
+            case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {
+               var nativeText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Native();
+               var textNativeLanguageElement:XML = <textNativeLanguage>{nativeText}</textNativeLanguage>;
+               chunkElement.appendChild(textNativeLanguageElement);
+               // TODO - so that we can display hanzi etc - rather than either/or, include both target language text and phonetic target language text
+               if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(targetLanguageISO639_3Code)) {
+                  var targetPhoneticText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_TargetPhonetic();
+                  targetPhoneticText = doesTextContainEmptyLineIndicator(targetPhoneticText) ? "" : targetPhoneticText;
+                  // TODO - next line is cmn-specific
+                  targetPhoneticText = PinyinProcessor.convertNumberToneIndicatorsToToneMarks(targetPhoneticText);
+                  var textTargetLanguagePhoneticElement:XML =
+                        <{defaultTextDisplayType}>{targetPhoneticText}</{defaultTextDisplayType}>;
+                  chunkElement.appendChild(textTargetLanguagePhoneticElement);
+               } else {
+                  var targetText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Target();
+                  targetText = doesTextContainEmptyLineIndicator(targetText) ? "" : targetText;
+                  var textTargetLanguageElement:XML = <{defaultTextDisplayType}>{targetText}</{defaultTextDisplayType}>;
+                  chunkElement.appendChild(textTargetLanguageElement);
+               }
+               break;
+            }
+            case Analyzer_ScriptChunk.CHUNK_TYPE__EXPLANATORY: {
+               var chunkTypeElement:XML = <chunkType>Explanatory</chunkType>;
+               chunkElement.appendChild(chunkTypeElement);
+               var displayText:String = Analyzer_ScriptChunk_Explanatory(chunkAnalyzer).getLineText_Display();
+               var textDisplayElement:XML = <textDisplay>{displayText}</textDisplay>;
+               chunkElement.appendChild(textDisplayElement);
+               var audioText:String = Analyzer_ScriptChunk_Explanatory(chunkAnalyzer).getLineText_Audio();
+               var textAudioElement:XML = <textAudio>{audioText}</textAudio>;
+               chunkElement.appendChild(textAudioElement);
+               break;
+            }
+            default:
+               Log.fatal("Analyzer_Script.createXML_ChunksElement() - No case for chunk type of: " + chunkAnalyzer.chunkType);
          }
          result.appendChild(chunkElement);
       }
@@ -553,7 +667,7 @@ public class Analyzer_Script extends Analyzer {
    }
 
    private function determineLineTypeId(lineNum:int):String {
-      if (lineNum == 15) {
+      if (lineNum == 15) {   // For debugging
          var i:int = 0;
       }
       var result:String;
@@ -568,9 +682,7 @@ public class Analyzer_Script extends Analyzer {
       } else if (isLineChunkLine(lineNum)) {
          result = determineLineType_ChunkLine(lineNum);
       } else {
-         // for debugging         TODO
-         isLineChunkLine(lineNum);
-
+         isLineChunkLine(lineNum);  // For debugging
          addProblemToProblemList_IndeterminateLineType(lineNum);
          result = Constants_LineType.LINE_TYPE_ID__UNKNOWN;
       }
@@ -581,37 +693,60 @@ public class Analyzer_Script extends Analyzer {
       // TODO - Single-language lessons
       var result:String;
       var positionInChunk:int = getPositionOfLineInChunk(lineNum);
-      if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(targetLanguageISO639_3Code)) {
-         switch (positionInChunk) {
-            case 1:
-               result = Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC;
-               break;
-            case 2:
-               result = Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE;
-               break;
-            case 3:
-               result = Constants_LineType.LINE_TYPE_ID__CHUNK__NATIVE_LANGUAGE;
-               break;
-            case 4:
-               result = Constants_LineType.LINE_TYPE_ID__CHUNK__NOTE;
-               break;
-            default:
-               Log.fatal("Analyzer_Script.determineLineType_ChunkLine(): no match for positionInChunk of " + positionInChunk);
+      switch (getChunkTypeOfChunkContainingLine(lineNum)) {
+         case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {
+            if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(targetLanguageISO639_3Code)) {
+               switch (positionInChunk) {
+                  case 1:
+                     result = Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE__PHONETIC;
+                     break;
+                  case 2:
+                     result = Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE;
+                     break;
+                  case 3:
+                     result = Constants_LineType.LINE_TYPE_ID__CHUNK__NATIVE_LANGUAGE;
+                     break;
+                  case 4:
+                     result = Constants_LineType.LINE_TYPE_ID__CHUNK__NOTE;
+                     break;
+                  default:
+                     Log.fatal("Analyzer_Script.determineLineType_ChunkLine(): no match for positionInChunk of " + positionInChunk);
+               }
+            } else {
+               switch (positionInChunk) {
+                  case 1:
+                     result = Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE;
+                     break;
+                  case 2:
+                     result = Constants_LineType.LINE_TYPE_ID__CHUNK__NATIVE_LANGUAGE;
+                     break;
+                  case 3:
+                     result = Constants_LineType.LINE_TYPE_ID__CHUNK__NOTE;
+                     break;
+                  default:
+                     Log.fatal("Analyzer_Script.determineLineType_ChunkLine(): no match for positionInChunk of " + positionInChunk);
+               }
+            }
+            break;
          }
-      } else {
-         switch (positionInChunk) {
-            case 1:
-               result = Constants_LineType.LINE_TYPE_ID__CHUNK__TARGET_LANGUAGE;
-               break;
-            case 2:
-               result = Constants_LineType.LINE_TYPE_ID__CHUNK__NATIVE_LANGUAGE;
-               break;
-            case 3:
-               result = Constants_LineType.LINE_TYPE_ID__CHUNK__NOTE;
-               break;
-            default:
-               Log.fatal("Analyzer_Script.determineLineType_ChunkLine(): no match for positionInChunk of " + positionInChunk);
+         case Analyzer_ScriptChunk.CHUNK_TYPE__EXPLANATORY: {
+            switch (positionInChunk) {
+               case 1:
+                  result = Constants_LineType.LINE_TYPE_ID__CHUNK__EXPLANATORY__DISPLAY_TEXT;
+                  break;
+               case 2:
+                  result = Constants_LineType.LINE_TYPE_ID__CHUNK__EXPLANATORY__AUDIO_TEXT;
+                  break;
+               case 3:
+                  result = Constants_LineType.LINE_TYPE_ID__CHUNK__NOTE;
+                  break;
+               default:
+                  Log.fatal("Analyzer_Script.determineLineType_ChunkLine(): no match for positionInChunk of " + positionInChunk);
+            }
+            break;
          }
+         default:
+            Log.fatal("Analyzer_Script.determineLineType_ChunkLine(): No match for chunk type of " + getChunkTypeOfChunkContainingLine(lineNum));
       }
       return result;
    }
@@ -688,6 +823,24 @@ public class Analyzer_Script extends Analyzer {
       } else {
          return false;
       }
+   }
+
+   private function getChunkTypeOfChunkContainingLine(lineNum:int):String {
+      // Assumption: We've already determined that this is a chunk line
+      var previousBlankLineNum:uint = getLastBlankLineNumBefore(lineNum);
+      var nextBlankLineNum:uint = getFirstBlankLineNumAfter(lineNum);
+      var result:String = "";
+      for (var tempLineNum:uint = previousBlankLineNum + 1; tempLineNum < nextBlankLineNum; tempLineNum++) {
+         if (!isLineCommentLine(tempLineNum))
+            continue;
+         if (isLineExplanatoryChunkTypeLine(tempLineNum)) {
+            result = Analyzer_ScriptChunk.CHUNK_TYPE__EXPLANATORY;
+            break;
+         }
+      }
+      if (result == "")
+         result = Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT;
+      return result;
    }
 
    private function getCountOfCommentLinesInLineGroup(firstLineNum:int, lastLineNum:int):int {
@@ -806,8 +959,8 @@ public class Analyzer_Script extends Analyzer {
 
    private function isLineChunkLine(lineNum:int):Boolean {
       // Assumption: We're past the header.
-      // For purposes of this initial line type id we simply confirm that this line is part of a group of lines bordered by
-      // blank lines, where the number of non-comment lines in the group equals ((2 or 3) + _nativeLanguageCount).
+      // For purposes of this method we simply confirm that this line is part of a group of lines bordered by
+      // blank lines, where the number of non-comment lines in the group is appropriate for a chunk.
       if (isLineBlankLine(lineNum))
          return false;
       var previousBlankLineNum:int = getLastBlankLineNumBefore(lineNum);
@@ -826,6 +979,15 @@ public class Analyzer_Script extends Analyzer {
 
    private function isLineCommentLine(lineNum:int):Boolean {
       return Analyzer_ScriptLine_Comment.isLineThisType(_lineStringList[lineNum - 1])
+   }
+
+   private function isLineExplanatoryChunkTypeLine(lineNum:int):Boolean {
+      if (lineNum == 0)
+         return false;
+      if (!Analyzer_ScriptLine_Comment.isLineThisType(_lineStringList[lineNum - 1], _lineStringList, lineNum))
+         return false;
+      var result:Boolean = (String(_lineStringList[lineNum - 1]).indexOf(Constants_Misc.SCRIPT_COMMENT_TAG__CHUNK__EXPLANATORY_CHUNK) != -1);
+      return result;
    }
 
    private function isLineHeaderLine(lineNum:int):Boolean {

@@ -110,6 +110,12 @@ import com.brightworks.lessoncreator.problems.LessonProblem;
          return (isAudioRecordingNoteComment() && (iso639_3Code == getLanguageCodeForAudioRecordingNote()))
       }
 
+      public function isExplanatoryChunkComment():Boolean {
+         if (lineText.length > (Constants_Misc.SCRIPT_COMMENT_TAG__CHUNK__EXPLANATORY_CHUNK.length + 3))
+            return false;
+         return (lineText.indexOf(Constants_Misc.SCRIPT_COMMENT_TAG__CHUNK__EXPLANATORY_CHUNK) != -1);
+      }
+
       public function isIgnoreProblemsComment():Boolean {
          return (lineText.indexOf(Constants_Misc.SCRIPT_COMMENT_TAG__LINE__IGNORE_PROBLEMS) != -1);
       }

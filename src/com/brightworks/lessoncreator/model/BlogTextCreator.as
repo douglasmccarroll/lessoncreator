@@ -2,6 +2,9 @@ package com.brightworks.lessoncreator.model {
 
 import com.brightworks.lessoncreator.analyzers.Analyzer_Script;
 import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk;
+import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk_Default;
+import com.brightworks.lessoncreator.analyzers.Analyzer_ScriptChunk_Explanatory;
+import com.brightworks.util.Log;
 import com.brightworks.util.Utils_String;
 
 public class BlogTextCreator {
@@ -47,18 +50,31 @@ public class BlogTextCreator {
 
    private function createScriptText_Chunk(chunkAnalyzer:Analyzer_ScriptChunk):String {
       var result:String = "";
-      var text_Chunk_Native:String = chunkAnalyzer.getLineText_Native();
-      var text_Chunk_Target:String = chunkAnalyzer.getLineText_Target();
-      var text_Chunk_TargetPhonetic:String = chunkAnalyzer.getLineText_TargetPhonetic();
-      var text_Chunk_Note:String = chunkAnalyzer.getLineText_Note();
-      text_Chunk_Native = Utils_String.replaceAll(text_Chunk_Native, "-0-", "");
-      result += text_Chunk_Native + "\n";
-      if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(_lessonDevFolder.targetLanguageISO639_3Code)) {
-         text_Chunk_TargetPhonetic = Utils_String.replaceAll(text_Chunk_TargetPhonetic, "-0-", "");
-         result += text_Chunk_TargetPhonetic + "\n";
+      switch (chunkAnalyzer.chunkType) {
+         case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {
+            var text_Chunk_Native:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Native();
+            var text_Chunk_Target:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Target();
+            var text_Chunk_TargetPhonetic:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_TargetPhonetic();
+            text_Chunk_Native = Utils_String.replaceAll(text_Chunk_Native, "-0-", "");
+            result += text_Chunk_Native + "\n";
+            if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(_lessonDevFolder.targetLanguageISO639_3Code)) {
+               text_Chunk_TargetPhonetic = Utils_String.replaceAll(text_Chunk_TargetPhonetic, "-0-", "");
+               result += text_Chunk_TargetPhonetic + "\n";
+            }
+            text_Chunk_Target = Utils_String.replaceAll(text_Chunk_Target, "-0-", "");
+            result += text_Chunk_Target + "\n";
+            break;
+         }
+         case Analyzer_ScriptChunk.CHUNK_TYPE__EXPLANATORY: {
+            var text_Chunk_Display:String = Analyzer_ScriptChunk_Explanatory(chunkAnalyzer).getLineText_Display();
+            var text_Chunk_Audio:String = Analyzer_ScriptChunk_Explanatory(chunkAnalyzer).getLineText_Audio();
+            result += text_Chunk_Display + "\n" + text_Chunk_Audio + "\n";
+            break;
+         }
+         default:
+            Log.error("BlogTextCreator.createScriptText_Chunk() - No case for chunk type of: " + chunkAnalyzer.chunkType);
       }
-      text_Chunk_Target = Utils_String.replaceAll(text_Chunk_Target, "-0-", "");
-      result += text_Chunk_Target + "\n";
+      var text_Chunk_Note:String = chunkAnalyzer.getLineText_Note();
       if (text_Chunk_Note)
             result += text_Chunk_Note + "\n";
       result += " \n";  // We include a space here because some blog platforms interpret a lone "\n" as a paragraph break, and we want a simple blank line
