@@ -187,6 +187,15 @@ public class Analyzer_Script extends Analyzer {
       return MainModel.getInstance().languageConfigInfo.getAllowedNonCommentChunkLineCount_Minimum(targetLanguageISO639_3Code);
    }
 
+   public function getAudioFileNameList():Array {
+      var result:Array = [];
+      for (var chunkNum:uint = 1; chunkNum <= chunkCount; chunkNum++) {
+         var chunkAnalyzer:Analyzer_ScriptChunk = getChunkAnalyzer(chunkNum);
+         chunkAnalyzer.addAudioFileNamesToList(result);
+      }
+      return result;
+   }
+
    public function getChunkAnalyzer(chunkNum:uint):Analyzer_ScriptChunk {
       if (chunkNum > _chunkCount) {
          Log.error("Analyzer_Script.getChunkAnalyzer(): chunkNum too high");
@@ -622,8 +631,7 @@ public class Analyzer_Script extends Analyzer {
       var result:XML = <chunks/>;
       for each (var chunkAnalyzer:Analyzer_ScriptChunk in _chunkAnalyzerList) {
          var chunkElement:XML = <chunk/>;
-         var chunkNumberString:String = Utils_DataConversionComparison.convertNumberToString(chunkAnalyzer.chunkNumber, 0, true, 2, "0");
-         var fileNameRootElement:XML = <fileNameRoot>{chunkNumberString}</fileNameRoot>;
+         var fileNameRootElement:XML = <fileNameRoot>{chunkAnalyzer.chunkNumberString}</fileNameRoot>;
          chunkElement.appendChild(fileNameRootElement);
          switch (chunkAnalyzer.chunkType) {
             case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {

@@ -2,7 +2,8 @@ package com.brightworks.lessoncreator.analyzers {
 
 import com.brightworks.constant.Constant_ReleaseType;
 import com.brightworks.lessoncreator.constants.Constants_LineType;
-   import com.brightworks.lessoncreator.constants.Constants_Punctuation;
+import com.brightworks.lessoncreator.constants.Constants_Misc;
+import com.brightworks.lessoncreator.constants.Constants_Punctuation;
    import com.brightworks.lessoncreator.fixes.Fix;
    import com.brightworks.lessoncreator.fixes.Fix_Chunk_PunctuationMismatch_Ellipsis_TargetToTargetPhonetic;
    import com.brightworks.lessoncreator.fixes.Fix_Chunk_PunctuationMismatch_TargetToTargetPhonetic;
@@ -27,6 +28,12 @@ import com.brightworks.util.Log;
       public function Analyzer_ScriptChunk_Default(scriptAnalyzer:Analyzer_Script) {
          chunkType = Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT;
          super(scriptAnalyzer);
+      }
+
+      public override function addAudioFileNamesToList(list:Array):void {
+         list.push(chunkNumberString + "." + nativeLanguageIso639_3Code + "." + Constants_Misc.FILE_NAME_EXTENSION__AUDIO_FILE__WAV);
+         list.push(chunkNumberString + "." + targetLanguageIso639_3Code + "." + Constants_Misc.FILE_NAME_EXTENSION__AUDIO_FILE__WAV);
+         return;
       }
 
       public function getAudioRecordingNotesForLanguage(iso639_3Code:String):Array {

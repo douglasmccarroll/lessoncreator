@@ -3,14 +3,19 @@ package com.brightworks.lessoncreator.model {
    import com.brightworks.lessoncreator.analyzers.Analyzer_Script;
    import com.brightworks.lessoncreator.constants.Constants_Misc;
    import com.brightworks.lessoncreator.constants.Constants_Misc;
-   import com.brightworks.lessoncreator.fixes.Fix_Lesson_IncorrectFileName_Credits;
+import com.brightworks.lessoncreator.fixes.Fix;
+import com.brightworks.lessoncreator.fixes.Fix_Lesson_IncorrectFileName_Credits;
    import com.brightworks.lessoncreator.fixes.Fix_Lesson_IncorrectFileName_Script;
    import com.brightworks.lessoncreator.fixes.Fix_Lesson_IncorrectFileName_Xml;
-   import com.brightworks.lessoncreator.fixes.Fix_Lesson_MissingRequiredSubfolders;
+import com.brightworks.lessoncreator.fixes.Fix_Lesson_MissingFileOrFiles_Audio;
+import com.brightworks.lessoncreator.fixes.Fix_Lesson_MissingRequiredSubfolders;
    import com.brightworks.lessoncreator.fixes.Fix_Lesson_MissingFile_Script;
-   import com.brightworks.lessoncreator.problems.LessonProblem;
+import com.brightworks.lessoncreator.fixes.Fix_Lesson_UnneededOrMisnamedFileOrFiles_Audio;
+import com.brightworks.lessoncreator.problems.LessonProblem;
    import com.brightworks.util.Log;
-   import com.brightworks.util.Utils_File;
+import com.brightworks.util.Utils_ArrayVectorEtc;
+import com.brightworks.util.Utils_DataConversionComparison;
+import com.brightworks.util.Utils_File;
    import com.brightworks.util.Utils_String;
    import com.brightworks.util.Utils_XML;
    import com.brightworks.util.text.PinyinProcessor;
@@ -265,10 +270,18 @@ package com.brightworks.lessoncreator.model {
                   result.addItem(problem);
             }
          }
-         if ((getFile_script()) && _scriptAnalyzer.doProblemsExist()) {
-            for each (problem in _scriptAnalyzer.problemList) {
-               result.addItem(problem);
+         if (getFile_script()) {
+            if (_scriptAnalyzer.doProblemsExist()) {
+               for each (problem in _scriptAnalyzer.problemList) {
+                  result.addItem(problem);
+               }
+            } else {
+               // The script is problem-free, so we can check our audio files
+               for each (problem in checkForMissingOrIncorrectAudioFiles()) {
+                  result.addItem(problem);
+               }
             }
+
          }
          return result;
       }
@@ -410,6 +423,74 @@ package com.brightworks.lessoncreator.model {
                LessonProblem.PROBLEM_LEVEL__IMPEDIMENT);
          }
          return problem;
+      }
+
+      private function checkForMissingOrIncorrectAudioFiles():Array {
+         var result:Array = [];
+         var fileNameList_RequiredFiles:Array = scriptAnalyzer.getAudioFileNameList();
+         var fileNameList_ActualFiles:Array = [];
+         var fileNameList_MissingFiles:Array = [];
+         var fileNameList_UnneedOrIncorrectlyNamedFiles:Array = [];
+         for each (var f:File in getSubfolder_wav().getDirectoryListing()) {
+            if (f.isDirectory) {
+               Log.warn("LessonDevFolder.checkForMissingOrIncorrectAudioFiles() - Folder in 'wav' folder - this should have been caught before this, and the user informed");
+               continue;
+            }
+            fileNameList_ActualFiles.push(f.name);
+         }
+         var fileName:String;
+         for each (fileName in fileNameList_RequiredFiles) {
+            if (fileNameList_ActualFiles.indexOf(fileName) == -1) {
+               fileNameList_MissingFiles.push(fileName);
+            }
+         }
+         for each (fileName in fileNameList_ActualFiles) {
+            if (fileNameList_RequiredFiles.indexOf(fileName) == -1) {
+               if (fileName != ".DS_Store")
+                     fileNameList_UnneedOrIncorrectlyNamedFiles.push(fileName);
+            }
+         }
+         var maxFilesToListInProblemDescription:uint = 8;
+         var problemDescription:String = "";
+         var numberOfFilesToList:uint;
+         var fix:Fix;
+         var problem:LessonProblem;
+         if (fileNameList_MissingFiles.length > 0) {
+            numberOfFilesToList = Math.min(fileNameList_MissingFiles.length, maxFilesToListInProblemDescription);
+            if (numberOfFilesToList == 1) {
+               problemDescription += "Missing audio file.";
+            } else {
+               problemDescription += "Missing audio files.";
+            }
+            fix = new Fix_Lesson_MissingFileOrFiles_Audio(fileNameList_MissingFiles, maxFilesToListInProblemDescription);
+            problem =
+                  new LessonProblem(
+                        this,
+                        problemDescription,
+                        LessonProblem.PROBLEM_TYPE__AUDIO__MISSING_FILE_OR_FILES,
+                        LessonProblem.PROBLEM_LEVEL__IMPEDIMENT,
+                        fix);
+            result.push(problem);
+         }
+         problemDescription = "";
+         if (fileNameList_UnneedOrIncorrectlyNamedFiles.length > 0) {
+            numberOfFilesToList = Math.min(fileNameList_UnneedOrIncorrectlyNamedFiles.length, maxFilesToListInProblemDescription);
+            if (numberOfFilesToList == 1) {
+               problemDescription += "Unneeded or misnamed audio file.";
+            } else {
+               problemDescription += "Unneeded or misnamed audio files.";
+            }
+            fix = new Fix_Lesson_UnneededOrMisnamedFileOrFiles_Audio(fileNameList_UnneedOrIncorrectlyNamedFiles, maxFilesToListInProblemDescription);
+            problem =
+                  new LessonProblem(
+                        this,
+                        problemDescription,
+                        LessonProblem.PROBLEM_TYPE__AUDIO__UNNEEDED_OR_MISNAMED_FILE_OR_FILES,
+                        LessonProblem.PROBLEM_LEVEL__IMPEDIMENT,
+                        fix);
+            result.push(problem);
+         }
+         return result;
       }
 
       private function checkForMissingRequiredSubfoldersAndAttemptToCreateIfMissing():LessonProblem {

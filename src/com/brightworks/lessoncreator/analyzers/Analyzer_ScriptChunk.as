@@ -11,7 +11,8 @@ import com.brightworks.lessoncreator.problems.LessonProblem;
 import com.brightworks.lessoncreator.util.translationcheck.TranslationCheck;
 import com.brightworks.lessoncreator.util.translationcheck.TranslationCheckProcessor;
 import com.brightworks.util.Log;
-   import com.brightworks.util.Utils_String;
+import com.brightworks.util.Utils_DataConversionComparison;
+import com.brightworks.util.Utils_String;
 
    import flash.utils.Dictionary;
 
@@ -34,7 +35,11 @@ import com.brightworks.util.Log;
       //
       //          Getters & Setters
       //
-      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -  
+      // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+      public function get chunkNumberString():String {
+         return Utils_DataConversionComparison.convertNumberToString(chunkNumber, 0, true, 2, "0");
+      }
 
       public function get lineNumber_FirstLine():uint {
          var lineAnalyzer:Analyzer_ScriptLine = lineAnalyzerListIncludingCommentLines[0];
@@ -74,6 +79,11 @@ import com.brightworks.util.Log;
             return null;   // This is usually the case when the line-type is 'note'
          var result:Analyzer_ScriptLine = lineInfoList[lineType];
          return result;
+      }
+
+      public function addAudioFileNamesToList(list:Array):void {
+         Log.fatal("Analyzer_ScriptChunk.addAudioFileNamesToList() - Abstract method - should only be called in subclasses");
+         return;
       }
 
       public function getLineNumber(lineType:String):uint {

@@ -3,6 +3,8 @@ package com.brightworks.lessoncreator.constants {
    public class Constants_Misc {
       public static const APPLICATION_NAME:String = "Lesson Creator";
       public static const BLANK_LINE_INDICATOR:String = "-0-";
+      public static const FILE_NAME_BODY__EXPLANATORY_AUDIO:String = "xply";
+      public static const FILE_NAME_EXTENSION__AUDIO_FILE__WAV:String = "wav";
       public static const FILE_NAME_EXTENSION__LESSON_BLOG_FILE:String = "blog.txt";
       public static const FILE_NAME_EXTENSION__LESSON_CREDITS_FILE:String = "credits.xml";
       public static const FILE_NAME_EXTENSION__LESSON_SCRIPT_FILE:String = "lmls";
