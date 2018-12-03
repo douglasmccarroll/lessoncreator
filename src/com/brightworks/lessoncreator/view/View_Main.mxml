@@ -15,6 +15,7 @@
       import com.brightworks.util.Log;
 
       import mx.collections.ArrayCollection;
+      import mx.collections.Sort;
       import mx.events.EffectEvent;
 
       import spark.effects.Fade;

@@ -28,7 +28,6 @@ package com.brightworks.lessoncreator.constants {
       public static const SCRIPT_COMMENT_TAG__CHUNK__EXPLANATORY_CHUNK:String = "Explanatory";
       public static const SCRIPT_COMMENT_TAG__CHUNK__VOCABULARY_CHUNK:String = "Vocab";
       public static const SCRIPT_COMMENT_TAG__LINE__IGNORE_PROBLEMS:String = "HumanCheck:";
-      public static const USER_ACTION_REQUIRED_WAIT_INTERVAL:Number = 400;
 
       public static function get CHINESE_PUNCTUATION_RULES():String {
          var result:String = "";

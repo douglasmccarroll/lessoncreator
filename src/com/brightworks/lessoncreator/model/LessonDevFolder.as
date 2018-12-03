@@ -166,10 +166,15 @@ import com.brightworks.util.Utils_File;
          if (Utils_File.getCountOfFilesInFolder(getSubfolder_credits(), false) != 1)
             return null;
          var file:File = Utils_File.getSingleFileInFolder(getSubfolder_credits());
-         if (file.name == getFileName_credits())
+         if (file.name == getFileName_credits()) {
             return file;
-         else
+         }
+         else {
+            // For debugging
+            var computedFileName:String = getFileName_credits();
             return null;
+         }
+
       }
 
       public function getFile_script():File {
@@ -450,7 +455,7 @@ import com.brightworks.util.Utils_File;
                      fileNameList_UnneedOrIncorrectlyNamedFiles.push(fileName);
             }
          }
-         var maxFilesToListInProblemDescription:uint = 8;
+         var maxFilesToListInProblemDescription:uint = 10;
          var problemDescription:String = "";
          var numberOfFilesToList:uint;
          var fix:Fix;
@@ -611,6 +616,7 @@ import com.brightworks.util.Utils_File;
             Utils_File.writeTextFile(f, s);
          } else {
             if (Utils_File.getCountOfFilesInFolder(getSubfolder_blog(), false) > 0) {
+               ///// This should have gotten caught before this - it's happening when there's an old, incorrectly named file in the folder and then (at least this is my theory) a new file gets created - perhaps the wrong file should be put into an 'archive' folder
                Log.warn("LessonDevFolder.writeBlogFile(): Can't obtain file yet file count in folder > 0")
             }
             f = getSubfolder_blog().resolvePath(getFileName_blog());

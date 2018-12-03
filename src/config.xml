@@ -29,10 +29,10 @@
       </remoteFolder>
     </library>
     <library>
-      <id>com.languagecollaborative.deu_boga_nina</id>
-      <displayName>Nina Bogattke</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_boga_nina</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-boga-nina.langcollab.com</stagingFolderPath>
+      <id>com.languagecollaborative.deu_vocal_creations_berlin</id>
+      <displayName>Vocal Creations Berlin</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_vocal_creations_berlin</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-vocal-creations-berlin.langcollab.com</stagingFolderPath>
     </library>
     <library>
       <id>com.languagecollaborative.deu_lc</id>
