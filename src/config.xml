@@ -361,13 +361,6 @@
       </replacementOptions>
     </restriction>
     <restriction>
-      <content>chinese</content>
-      <caseSensitive>true</caseSensitive>
-      <replacementOptions>
-        <option></option>
-      </replacementOptions>
-    </restriction>
-    <restriction>
       <content>dao4 shi4</content>
       <replacementOptions>
         <option></option>
