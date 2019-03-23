@@ -166,15 +166,19 @@ import com.brightworks.util.Utils_File;
          if (Utils_File.getCountOfFilesInFolder(getSubfolder_credits(), false) != 1)
             return null;
          var file:File = Utils_File.getSingleFileInFolder(getSubfolder_credits());
-         if (file.name == getFileName_credits()) {
-            return file;
+         if (file) {
+            if (file.name == getFileName_credits()) {
+               return file;
+            }
+            else {
+               // For debugging
+               var computedFileName:String = getFileName_credits();
+               return null;
+            }
          }
          else {
-            // For debugging
-            var computedFileName:String = getFileName_credits();
             return null;
          }
-
       }
 
       public function getFile_script():File {
@@ -435,13 +439,22 @@ import com.brightworks.util.Utils_File;
          var fileNameList_RequiredFiles:Array = scriptAnalyzer.getAudioFileNameList();
          var fileNameList_ActualFiles:Array = [];
          var fileNameList_MissingFiles:Array = [];
-         var fileNameList_UnneedOrIncorrectlyNamedFiles:Array = [];
-         for each (var f:File in getSubfolder_wav().getDirectoryListing()) {
-            if (f.isDirectory) {
-               Log.warn("LessonDevFolder.checkForMissingOrIncorrectAudioFiles() - Folder in 'wav' folder - this should have been caught before this, and the user informed");
-               continue;
+         var fileNameList_UnneededOrIncorrectlyNamedFiles:Array = [];
+
+         var wavFolder:File = getSubfolder_wav();
+         if (!wavFolder) {
+            ///// This should not happen - this check should be happening after we've established that a wav folder exists
+            return [];
+         }
+         var wavFolderContents:Array = wavFolder.getDirectoryListing();
+         if ((wavFolderContents is Array) && (wavFolderContents.length > 0)) {
+            for each (var f:File in wavFolderContents) {
+               if (f.isDirectory) {
+                  Log.warn("LessonDevFolder.checkForMissingOrIncorrectAudioFiles() - Folder in 'wav' folder - this should have been caught before this, and the user informed");
+                  continue;
+               }
+               fileNameList_ActualFiles.push(f.name);
             }
-            fileNameList_ActualFiles.push(f.name);
          }
          var fileName:String;
          for each (fileName in fileNameList_RequiredFiles) {
@@ -452,7 +465,7 @@ import com.brightworks.util.Utils_File;
          for each (fileName in fileNameList_ActualFiles) {
             if (fileNameList_RequiredFiles.indexOf(fileName) == -1) {
                if (fileName != ".DS_Store")
-                     fileNameList_UnneedOrIncorrectlyNamedFiles.push(fileName);
+                     fileNameList_UnneededOrIncorrectlyNamedFiles.push(fileName);
             }
          }
          var maxFilesToListInProblemDescription:uint = 10;
@@ -478,14 +491,14 @@ import com.brightworks.util.Utils_File;
             result.push(problem);
          }
          problemDescription = "";
-         if (fileNameList_UnneedOrIncorrectlyNamedFiles.length > 0) {
-            numberOfFilesToList = Math.min(fileNameList_UnneedOrIncorrectlyNamedFiles.length, maxFilesToListInProblemDescription);
+         if (fileNameList_UnneededOrIncorrectlyNamedFiles.length > 0) {
+            numberOfFilesToList = Math.min(fileNameList_UnneededOrIncorrectlyNamedFiles.length, maxFilesToListInProblemDescription);
             if (numberOfFilesToList == 1) {
                problemDescription += "Unneeded or misnamed audio file.";
             } else {
                problemDescription += "Unneeded or misnamed audio files.";
             }
-            fix = new Fix_Lesson_UnneededOrMisnamedFileOrFiles_Audio(fileNameList_UnneedOrIncorrectlyNamedFiles, maxFilesToListInProblemDescription);
+            fix = new Fix_Lesson_UnneededOrMisnamedFileOrFiles_Audio(fileNameList_UnneededOrIncorrectlyNamedFiles, maxFilesToListInProblemDescription);
             problem =
                   new LessonProblem(
                         this,

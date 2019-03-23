@@ -64,9 +64,9 @@ public class Analyzer_Script extends Analyzer {
    public function get defaultTextDisplayType():String {
       var result:String;
       if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(targetLanguageISO639_3Code)) {
-         result = "textTargetLanguagePhonetic";
+         result = Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE_PHONETIC;
       } else {
-         result = "textTargetLanguage";
+         result = Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE;
       }
       return result;
    }
@@ -636,22 +636,20 @@ public class Analyzer_Script extends Analyzer {
          switch (chunkAnalyzer.chunkType) {
             case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {
                var nativeText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Native();
-               var textNativeLanguageElement:XML = <textNativeLanguage>{nativeText}</textNativeLanguage>;
+               var textNativeLanguageElement:XML = <{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__NATIVE_LANGUAGE}>{nativeText}</{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__NATIVE_LANGUAGE}>;
                chunkElement.appendChild(textNativeLanguageElement);
-               // TODO - so that we can display hanzi etc - rather than either/or, include both target language text and phonetic target language text
+               var targetText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Target();
+               targetText = doesTextContainEmptyLineIndicator(targetText) ? "" : targetText;
+               var textTargetLanguageElement:XML = <{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE}>{targetText}</{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE}>;
+               chunkElement.appendChild(textTargetLanguageElement);
                if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(targetLanguageISO639_3Code)) {
                   var targetPhoneticText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_TargetPhonetic();
                   targetPhoneticText = doesTextContainEmptyLineIndicator(targetPhoneticText) ? "" : targetPhoneticText;
                   // TODO - next line is cmn-specific
                   targetPhoneticText = PinyinProcessor.convertNumberToneIndicatorsToToneMarks(targetPhoneticText);
                   var textTargetLanguagePhoneticElement:XML =
-                        <{defaultTextDisplayType}>{targetPhoneticText}</{defaultTextDisplayType}>;
+                        <{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE_PHONETIC}>{targetPhoneticText}</{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE_PHONETIC}>;
                   chunkElement.appendChild(textTargetLanguagePhoneticElement);
-               } else {
-                  var targetText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Target();
-                  targetText = doesTextContainEmptyLineIndicator(targetText) ? "" : targetText;
-                  var textTargetLanguageElement:XML = <{defaultTextDisplayType}>{targetText}</{defaultTextDisplayType}>;
-                  chunkElement.appendChild(textTargetLanguageElement);
                }
                break;
             }
@@ -659,10 +657,10 @@ public class Analyzer_Script extends Analyzer {
                var chunkTypeElement:XML = <chunkType>Explanatory</chunkType>;
                chunkElement.appendChild(chunkTypeElement);
                var displayText:String = Analyzer_ScriptChunk_Explanatory(chunkAnalyzer).getLineText_Display();
-               var textDisplayElement:XML = <textDisplay>{displayText}</textDisplay>;
+               var textDisplayElement:XML = <{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__EXPLANATORY__TEXT_DISPLAY}>{displayText}</{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__EXPLANATORY__TEXT_DISPLAY}>;
                chunkElement.appendChild(textDisplayElement);
                var audioText:String = Analyzer_ScriptChunk_Explanatory(chunkAnalyzer).getLineText_Audio();
-               var textAudioElement:XML = <textAudio>{audioText}</textAudio>;
+               var textAudioElement:XML = <{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__EXPLANATORY__TEXT_AUDIO}>{audioText}</{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__EXPLANATORY__TEXT_AUDIO}>;
                chunkElement.appendChild(textAudioElement);
                break;
             }

@@ -29,6 +29,12 @@ package com.brightworks.lessoncreator.constants {
       public static const SCRIPT_COMMENT_TAG__CHUNK__VOCABULARY_CHUNK:String = "Vocab";
       public static const SCRIPT_COMMENT_TAG__LINE__IGNORE_PROBLEMS:String = "HumanCheck:";
 
+      public static const XML_NODE_NAME__CHUNK_TEXT__EXPLANATORY__TEXT_AUDIO:String = "textAudio";
+      public static const XML_NODE_NAME__CHUNK_TEXT__EXPLANATORY__TEXT_DISPLAY:String = "textDisplay";
+      public static const XML_NODE_NAME__CHUNK_TEXT__NATIVE_LANGUAGE:String = "textNativeLanguage";
+      public static const XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE:String = "textTargetLanguage";
+      public static const XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE_PHONETIC:String = "textTargetLanguagePhonetic";
+
       public static function get CHINESE_PUNCTUATION_RULES():String {
          var result:String = "";
          result += "   1. For commas, periods, exclamation marks, question marks and parenthesis, use western-style marks in pinyin lines and hanzi-style marks in hanzi lines.\n";

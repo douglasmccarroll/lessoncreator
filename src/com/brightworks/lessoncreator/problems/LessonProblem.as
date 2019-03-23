@@ -114,7 +114,12 @@ package com.brightworks.lessoncreator.problems {
       }
 
       public function get humanReadableFixDescription():String {
-         return _fix.humanReadableFixDescription;
+         if (_fix) {
+            return _fix.humanReadableFixDescription;
+         }
+         else {
+            return "No fix found"; /////
+         }
       }
 
       public function get isScriptChunkSpecificProblem():Boolean {
