@@ -101,8 +101,10 @@ public class MainModel extends EventDispatcher implements IManagedSingleton {
       if (!_currentLessonDevFolder.doesProblemFreeScriptFileExist())
          return null;
       var library:LessonLibrary = _index_lessonLibraryId_to_lessonLibrary[_currentLessonDevFolder.libraryId];
-      if (!library)
+      if (!library) {
+         ///// This generally happens because the libID in the script doesn't match this lib's ID - should be caught before this
          return null;
+      }
       var languageFolderName:String = _currentLessonDevFolder.targetLanguageISO639_3Code;
       languageFolderName += (_currentLessonDevFolder.nativeLanguageISO639_3Code) ? "_" + _currentLessonDevFolder.nativeLanguageISO639_3Code : "";
       var folderPath:String = library.stagingFolderPath + File.separator + languageFolderName;

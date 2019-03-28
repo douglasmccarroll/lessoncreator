@@ -49,6 +49,8 @@ public class Command_DeployLesson extends Command_Base_LessonCreator {
          var lessonXml:XML = _lessonDevFolder.lessonXml;
          var filePath:String = model.getDeployFolderPathForCurrentLessonDevFolder() + File.separator + _lessonDevFolder.lessonId + ".xml";
          var newFile:File = new File();
+         if (!newFile)
+               return;
          newFile.nativePath = filePath;
          Utils_File.writeTextFile(newFile, lessonXml.toString());
          result(this);

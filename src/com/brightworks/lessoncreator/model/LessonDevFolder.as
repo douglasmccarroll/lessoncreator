@@ -375,14 +375,22 @@ import com.brightworks.util.Utils_File;
 
       private function checkCreditsFileName():LessonProblem {
          var problem:LessonProblem;
-         var file:File = getFile_credits();
-         if ((file) && (file.exists) && (file.name != getFileName_credits())) {
-            problem = new LessonProblem(
-               this,
-               "Incorrect credits file name",
-               LessonProblem.PROBLEM_TYPE__INCORRECT_CREDITS_FILE_NAME,
-               LessonProblem.PROBLEM_LEVEL__IMPEDIMENT,
-               new Fix_Lesson_IncorrectFileName_Credits());
+         if (Utils_File.getCountOfFilesInFolder(getSubfolder_credits(), false) == 1) {
+            var file:File = Utils_File.getSingleFileInFolder(getSubfolder_credits());
+            if (file.name != getFileName_credits()) {
+               problem = new LessonProblem(
+                  this,
+                  "Incorrect credits file name",
+                  LessonProblem.PROBLEM_TYPE__INCORRECT_CREDITS_FILE_NAME,
+                  LessonProblem.PROBLEM_LEVEL__IMPEDIMENT,
+                  new Fix_Lesson_IncorrectFileName_Credits());
+            }
+
+         }
+         else if (Utils_File.getCountOfFilesInFolder(getSubfolder_credits(), false) > 1) {
+            // This won't happen - it will have been found earlier in the process
+            Log.error("LessonDevFolder.checkCreditsFileName() - more than one file in 'credits' folder'");
+            return problem;
          }
          return problem;
       }
