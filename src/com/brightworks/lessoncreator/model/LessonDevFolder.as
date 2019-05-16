@@ -47,7 +47,8 @@ import com.brightworks.util.Utils_File;
             return null;
          var result:XML = _scriptAnalyzer.lessonXml;
          if (getFile_credits()) {
-            var creditsXml:XML = Utils_XML.synchronousLoadXML(getFile_credits(), false);
+            var f:File = getFile_credits();
+            var creditsXml:XML = Utils_XML.synchronousLoadXML(f, false);
             if (creditsXml)
                result.appendChild(creditsXml);
          }
