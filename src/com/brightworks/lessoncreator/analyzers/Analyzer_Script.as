@@ -673,7 +673,7 @@ public class Analyzer_Script extends Analyzer {
    }
 
    private function determineLineTypeId(lineNum:int):String {
-      if (lineNum == 15) {   // For debugging
+      if (lineNum == 16) {   // For debugging
          var i:int = 0;
       }
       var result:String;

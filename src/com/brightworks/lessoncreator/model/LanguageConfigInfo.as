@@ -74,15 +74,8 @@ public class LanguageConfigInfo {
    }
 
    public function getAllowedNonCommentChunkLineCount_Minimum(targetLanguageISO639_3Code:String):int {
-      var result:int = 0;
-      switch (targetLanguageISO639_3Code) {
-         case "cmn":
-            result = 3;
-            break;
-         default:
-            result = 2;
-      }
-      return result;
+      // So far, it seems that this would always be 2 //// but what about single-language lessons?
+      return 2;
    }
 
    public function getChunkLineStyleName_Native(capitalize:Boolean = true):String {
