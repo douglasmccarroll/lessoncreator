@@ -462,8 +462,15 @@ import com.brightworks.util.Utils_File;
                   Log.warn("LessonDevFolder.checkForMissingOrIncorrectAudioFiles() - Folder in 'wav' folder - this should have been caught before this, and the user informed");
                   continue;
                }
+               if (f.name == ".DS_Store") {
+                  continue;
+               }
                fileNameList_ActualFiles.push(f.name);
             }
+         }
+         if (fileNameList_ActualFiles.length == 0) {
+            // We have no files yet, so we don't do this check
+            return [];
          }
          var fileName:String;
          for each (fileName in fileNameList_RequiredFiles) {
@@ -473,8 +480,7 @@ import com.brightworks.util.Utils_File;
          }
          for each (fileName in fileNameList_ActualFiles) {
             if (fileNameList_RequiredFiles.indexOf(fileName) == -1) {
-               if (fileName != ".DS_Store")
-                     fileNameList_UnneededOrIncorrectlyNamedFiles.push(fileName);
+               fileNameList_UnneededOrIncorrectlyNamedFiles.push(fileName);
             }
          }
          var maxFilesToListInProblemDescription:uint = 10;

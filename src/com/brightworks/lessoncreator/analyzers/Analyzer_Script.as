@@ -90,9 +90,6 @@ public class Analyzer_Script extends Analyzer {
       result.appendChild(xmlElement);
       xmlElement = <lessonSortName>{lessonSortName}</lessonSortName>;
       result.appendChild(xmlElement);
-      var isAlphaReviewVersionString:String = (releaseType == Constant_ReleaseType.ALPHA_CAPITALIZED) ? "true" : "false";
-      xmlElement = <isAlphaReviewVersion>{isAlphaReviewVersionString}</isAlphaReviewVersion>;
-      result.appendChild(xmlElement);
       var isDualLanguageString:String = (isDualLanguage) ? "true" : "false";
       xmlElement = <isDualLanguage>{isDualLanguageString}</isDualLanguage>;
       result.appendChild(xmlElement);
