@@ -41,6 +41,12 @@
       <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-lc.langcollab.com</stagingFolderPath>
     </library>
     <library>
+      <id>com.languagecollaborative.eng_lc</id>
+      <displayName>Language Collaborative - English</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.eng_lc</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/eng-lc.langcollab.com</stagingFolderPath>
+    </library>
+    <library>
       <id>info.renhuibo</id>
       <displayName>Ren Huibo</displayName>
 	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/info.renhuibo</lessonDevFolderPath>
