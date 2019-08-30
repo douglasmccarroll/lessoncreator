@@ -632,9 +632,11 @@ public class Analyzer_Script extends Analyzer {
          chunkElement.appendChild(fileNameRootElement);
          switch (chunkAnalyzer.chunkType) {
             case Analyzer_ScriptChunk.CHUNK_TYPE__DEFAULT: {
-               var nativeText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Native();
-               var textNativeLanguageElement:XML = <{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__NATIVE_LANGUAGE}>{nativeText}</{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__NATIVE_LANGUAGE}>;
-               chunkElement.appendChild(textNativeLanguageElement);
+               if (isDualLanguage) {
+                  var nativeText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Native();
+                  var textNativeLanguageElement:XML = <{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__NATIVE_LANGUAGE}>{nativeText}</{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__NATIVE_LANGUAGE}>;
+                  chunkElement.appendChild(textNativeLanguageElement);
+               }
                var targetText:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Target();
                targetText = doesTextContainEmptyLineIndicator(targetText) ? "" : targetText;
                var textTargetLanguageElement:XML = <{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE}>{targetText}</{Constants_Misc.XML_NODE_NAME__CHUNK_TEXT__TARGET_LANGUAGE}>;

@@ -31,7 +31,9 @@ import com.brightworks.util.Log;
       }
 
       public override function addAudioFileNamesToList(list:Array):void {
-         list.push(chunkNumberString + "." + nativeLanguageIso639_3Code + "." + Constants_Misc.FILE_NAME_EXTENSION__AUDIO_FILE__WAV);
+         if (scriptAnalyzer.isDualLanguage) {
+            list.push(chunkNumberString + "." + nativeLanguageIso639_3Code + "." + Constants_Misc.FILE_NAME_EXTENSION__AUDIO_FILE__WAV);
+         }
          list.push(chunkNumberString + "." + targetLanguageIso639_3Code + "." + Constants_Misc.FILE_NAME_EXTENSION__AUDIO_FILE__WAV);
          return;
       }

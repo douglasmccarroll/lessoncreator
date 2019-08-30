@@ -3,6 +3,7 @@
     Content Restrictions and Translations are in alphabetical order.
     Alphabetization rules/order: space char, then letters, then numbers
   -->
+
   <libraries>
     <library>
       <id>com.douglasmccarroll.deu_neue_horizonte</id>
@@ -15,6 +16,12 @@
       <displayName>Douglas - German</displayName>
       <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_mcca_doug</lessonDevFolderPath>
       <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-mcca-doug.langcollab.com</stagingFolderPath>
+    </library>
+    <library>
+      <id>com.douglasmccarroll.kalsar01</id>
+      <displayName>Sarah Kalule</displayName>
+      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.douglasmccarroll.kalsar01</lessonDevFolderPath>
+      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/kalsar01.langcollab.com</stagingFolderPath>
     </library>
     <library>
       <id>com.languagecollaborative.cmn_lc</id>

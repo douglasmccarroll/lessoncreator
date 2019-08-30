@@ -55,8 +55,10 @@ public class BlogTextCreator {
             var text_Chunk_Native:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Native();
             var text_Chunk_Target:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_Target();
             var text_Chunk_TargetPhonetic:String = Analyzer_ScriptChunk_Default(chunkAnalyzer).getLineText_TargetPhonetic();
-            text_Chunk_Native = Utils_String.replaceAll(text_Chunk_Native, "-0-", "");
-            result += text_Chunk_Native + "\n";
+            if (text_Chunk_Native) {  ///// kludge - the chunk analyzer should know if/when this is a single language lesson?
+               text_Chunk_Native = Utils_String.replaceAll(text_Chunk_Native, "-0-", "");
+               result += text_Chunk_Native + "\n";
+            }
             if (MainModel.getInstance().languageConfigInfo.doesLanguageRequireUseOfPhoneticTargetLanguageLineInScript(_lessonDevFolder.targetLanguageISO639_3Code)) {
                text_Chunk_TargetPhonetic = Utils_String.replaceAll(text_Chunk_TargetPhonetic, "-0-", "");
                result += text_Chunk_TargetPhonetic + "\n";
