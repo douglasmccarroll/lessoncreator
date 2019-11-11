@@ -92,6 +92,9 @@ public class LanguageConfigInfo {
          case "deu":
             result = "German";
             break;
+         case "eng":
+            result = "English";
+            break;
          case "esp":
             result = "Spanish";
             break;
