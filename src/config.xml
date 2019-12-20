@@ -5,90 +5,97 @@
   -->
 
   <libraries>
-    <library>
-      <id>com.douglasmccarroll.deu_neue_horizonte</id>
-      <displayName>Neue Horizonte</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_new_horizons</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-new-horizons.langcollab.com</stagingFolderPath>
-    </library>
-    <library>
-      <id>com.douglasmccarroll.deu_pers</id>
-      <displayName>Douglas - German</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_mcca_doug</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-mcca-doug.langcollab.com</stagingFolderPath>
-    </library>
-    <library>
-      <id>com.douglasmccarroll.kalsar01</id>
-      <displayName>Sarah Kalule</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.douglasmccarroll.kalsar01</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/kalsar01.langcollab.com</stagingFolderPath>
-    </library>
-    <library>
-      <id>com.languagecollaborative.cmn_lc</id>
-      <displayName>Language Collaborative - Mandarin Chinese</displayName>
-	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.cmn_lc</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/cmn-lc.langcollab.com</stagingFolderPath>
-      <remoteFolder>
-        <host>cmn_lc.langcollab.com</host>
-        <folderPath>/home/langcollab_ftp/cmn-lc.langcollab.com</folderPath>
-        <userName>langcollab_ftp</userName>
-        <protocol>SFTP</protocol>
-      </remoteFolder>
-    </library>
-    <library>
-      <id>com.languagecollaborative.deu_vocal_creations_berlin</id>
-      <displayName>Vocal Creations Berlin</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_vocal_creations_berlin</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-vocal-creations-berlin.langcollab.com</stagingFolderPath>
-    </library>
-    <library>
-      <id>com.languagecollaborative.deu_lc</id>
-      <displayName>Language Collaborative - German</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_lc</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-lc.langcollab.com</stagingFolderPath>
-    </library>
-    <library>
-      <id>com.languagecollaborative.eng_lc</id>
-      <displayName>Language Collaborative - English</displayName>
-      <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.eng_lc</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/eng-lc.langcollab.com</stagingFolderPath>
-    </library>
-    <library>
-      <id>info.renhuibo</id>
-      <displayName>Ren Huibo</displayName>
-	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/info.renhuibo</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/cmn-ren-huibo.langcollab.com</stagingFolderPath>
-      <remoteFolder>
-        <host>cmn-ren-huibo.langcollab.com</host>
-        <folderPath>/home/langcollab_ftp/cmn-ren-huibo.langcollab.com</folderPath>
-        <userName>langcollab_ftp</userName>
-        <protocol>SFTP</protocol>
-      </remoteFolder>
-    </library>
-    <library>
-      <id>info.xiaina</id>
-      <displayName>Xi Aina</displayName>
-	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/info.xiaina</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/cmn-xi-aina.langcollab.com</stagingFolderPath>
-      <remoteFolder>
-        <host>cmn-xi-aina.langcollab.com</host>
-        <folderPath>/home/langcollab_ftp/cmn-xi-aina.langcollab.com</folderPath>
-        <userName>langcollab_ftp</userName>
-        <protocol>SFTP</protocol>
-      </remoteFolder>
-    </library>
-    <library>
-      <id>info.zhangqiwei</id>
-      <displayName>Zhang Qiwei</displayName>
-	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/info.zhangqiwei</lessonDevFolderPath>
-      <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/cmn-zhang-qiwei.langcollab.com</stagingFolderPath>
-      <remoteFolder>
-        <host>cmn-zhang-qiwei.langcollab.com</host>
-        <folderPath>/home/langcollab_ftp/cmn-zhang-qiwei.langcollab.com</folderPath>
-        <userName>langcollab_ftp</userName>
-        <protocol>SFTP</protocol>
-      </remoteFolder>
-    </library>
+      <library>
+        <id>com.languagecollaborative.deu_dw_langsam_nachrichten</id>
+        <displayName>DW Langsam Nachrichten</displayName>
+        <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_dw_langsam_nachrichten</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-dw-langsam-nachrichten.langcollab.com</stagingFolderPath>
+      </library>
+
+      <library>
+        <id>com.douglasmccarroll.deu_neue_horizonte</id>
+        <displayName>Neue Horizonte</displayName>
+        <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_new_horizons</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-new-horizons.langcollab.com</stagingFolderPath>
+      </library>
+      <library>
+        <id>com.douglasmccarroll.deu_pers</id>
+        <displayName>Douglas - German</displayName>
+        <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_mcca_doug</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-mcca-doug.langcollab.com</stagingFolderPath>
+      </library>
+      <library>
+        <id>com.douglasmccarroll.kalsar01</id>
+        <displayName>Sarah Kalule</displayName>
+        <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.douglasmccarroll.kalsar01</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/kalsar01.langcollab.com</stagingFolderPath>
+      </library>
+      <library>
+        <id>com.languagecollaborative.cmn_lc</id>
+        <displayName>Language Collaborative - Mandarin Chinese</displayName>
+  	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.cmn_lc</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/cmn-lc.langcollab.com</stagingFolderPath>
+        <remoteFolder>
+          <host>cmn_lc.langcollab.com</host>
+          <folderPath>/home/langcollab_ftp/cmn-lc.langcollab.com</folderPath>
+          <userName>langcollab_ftp</userName>
+          <protocol>SFTP</protocol>
+        </remoteFolder>
+      </library>
+      <library>
+        <id>com.languagecollaborative.deu_vocal_creations_berlin</id>
+        <displayName>Vocal Creations Berlin</displayName>
+        <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_vocal_creations_berlin</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-vocal-creations-berlin.langcollab.com</stagingFolderPath>
+      </library>
+      <library>
+        <id>com.languagecollaborative.deu_lc</id>
+        <displayName>Language Collaborative - German</displayName>
+        <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.deu_lc</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/deu-lc.langcollab.com</stagingFolderPath>
+      </library>
+      <library>
+        <id>com.languagecollaborative.eng_lc</id>
+        <displayName>Language Collaborative - English</displayName>
+        <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/com.languagecollaborative.eng_lc</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/eng-lc.langcollab.com</stagingFolderPath>
+      </library>
+      <library>
+        <id>info.renhuibo</id>
+        <displayName>Ren Huibo</displayName>
+  	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/info.renhuibo</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/cmn-ren-huibo.langcollab.com</stagingFolderPath>
+        <remoteFolder>
+          <host>cmn-ren-huibo.langcollab.com</host>
+          <folderPath>/home/langcollab_ftp/cmn-ren-huibo.langcollab.com</folderPath>
+          <userName>langcollab_ftp</userName>
+          <protocol>SFTP</protocol>
+        </remoteFolder>
+      </library>
+      <library>
+        <id>info.xiaina</id>
+        <displayName>Xi Aina</displayName>
+  	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/info.xiaina</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/cmn-xi-aina.langcollab.com</stagingFolderPath>
+        <remoteFolder>
+          <host>cmn-xi-aina.langcollab.com</host>
+          <folderPath>/home/langcollab_ftp/cmn-xi-aina.langcollab.com</folderPath>
+          <userName>langcollab_ftp</userName>
+          <protocol>SFTP</protocol>
+        </remoteFolder>
+      </library>
+      <library>
+        <id>info.zhangqiwei</id>
+        <displayName>Zhang Qiwei</displayName>
+  	  <lessonDevFolderPath>/Users/douglasmccarroll/_langmentor/Lesson Development/info.zhangqiwei</lessonDevFolderPath>
+        <stagingFolderPath>/Users/douglasmccarroll/_langmentor/PublishStaging/cmn-zhang-qiwei.langcollab.com</stagingFolderPath>
+        <remoteFolder>
+          <host>cmn-zhang-qiwei.langcollab.com</host>
+          <folderPath>/home/langcollab_ftp/cmn-zhang-qiwei.langcollab.com</folderPath>
+          <userName>langcollab_ftp</userName>
+          <protocol>SFTP</protocol>
+        </remoteFolder>
+      </library>
   </libraries>
   
   <productionScriptFolder>/Users/douglasmccarroll/_talent/Scripts</productionScriptFolder>  
