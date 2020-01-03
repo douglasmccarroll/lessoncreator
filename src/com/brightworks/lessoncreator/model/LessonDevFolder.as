@@ -663,7 +663,7 @@ import com.brightworks.util.Utils_File;
             Utils_File.writeTextFile(f, s);
          } else {
             if (Utils_File.getCountOfFilesInFolder(getSubfolder_xml(), false) > 0) {
-               ///// This should have gotten caught before this - it's happening when there's an old, incorrectly named file in the folder
+               ///// This should have been caught before this - it's happening when there's an old, incorrectly named file in the folder
                Log.warn("LessonDevFolder.writeXmlFile(): Can't obtain file yet file count in folder > 0")
             }
             f = getSubfolder_xml().resolvePath(getFileName_xml());
