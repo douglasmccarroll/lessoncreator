@@ -18,7 +18,7 @@ import com.brightworks.lessoncreator.constants.Constants_LineType;
    import com.brightworks.util.Utils_String;
 
    public class Analyzer_ScriptLine_Chunk_TargetLanguage extends Analyzer_ScriptLine_Chunk {
-      private static const LINE_CHAR_COUNT_RECOMMENDED_LIMIT:int = 77;
+      private static const LINE_CHAR_COUNT_RECOMMENDED_LIMIT:int = 80;
 
       // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
       //
