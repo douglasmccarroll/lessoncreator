@@ -643,7 +643,7 @@ import com.brightworks.util.Utils_File;
          if (f) {
             Utils_File.writeTextFile(f, s);
          } else {
-            if (Utils_File.getCountOfFilesInFolder(getSubfolder_blog(), false) > 0) {
+            if (Utils_File.getCountOfFilesInFolder(getSubfolder_blog(),  false) > 0) {
                ///// This should have gotten caught before this - it's happening when there's an old, incorrectly named file in the folder
                Log.warn("LessonDevFolder.writeBlogFile(): Can't obtain file yet file count in folder > 0")
             }
